@@ -1,6 +1,6 @@
-# Clever Marketplace
+# CleverMart
 
-Clever Marketplace is a web application that allows users to post, manage, and edit their products. It includes user authentication, product uploading with image support, and rich text editing for product descriptions. This project is built using modern web technologies and tools for both frontend and backend development.
+CleverMart is a web application that allows users to post, manage, and edit their products. It includes user authentication, product uploading with image support, and rich text editing for product descriptions. This project is built using modern web technologies and tools for both frontend and backend development.
 
 ## Project Overview
 

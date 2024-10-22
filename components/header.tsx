@@ -1,12 +1,12 @@
-import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+"use client";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { ModeToggle } from "./modeToggle";
 import { usePathname } from "next/navigation";
 
-export default async function Header() {
-  const { userId } = await auth();
+export default function Header() {
   const path = usePathname();
+  const { userId } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 w-full bg-white dark:bg-black border-b border-gray-200 dark:border-black z-50">
@@ -27,7 +27,7 @@ export default async function Header() {
               Dashboard
             </Link>
           )}
-          {userId && path === "/dashboard" && (
+          {userId && (path === "/dashboard" || path === "/") && (
             <Link
               href="/marketplace"
               className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"

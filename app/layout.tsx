@@ -18,23 +18,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <React.StrictMode>
-      <ClerkProvider afterSignOutUrl="/sign-in">
-        <html lang="en">
-          <body>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Header />
-              {children}
-              <Footer />
-            </ThemeProvider>
-          </body>
-        </html>
-      </ClerkProvider>
-    </React.StrictMode>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <ClerkProvider afterSignOutUrl="/">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

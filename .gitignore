@@ -34,3 +34,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Conventional Commits
+# The conventional commit message style is another way you can level up your commit messages. The conventional commits structure involves starting your commit message with a specified commit type. Commit types include:
+
+# Feat: feature
+
+# Fix: bug fixes
+
+# Docs: changes to the documentation like README
+
+# Style: style or formatting change 
+
+# Perf: improves code performance
+
+# Test: test a feature

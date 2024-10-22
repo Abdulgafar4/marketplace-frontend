@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "CleverMart",
@@ -16,20 +18,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider afterSignOutUrl="/">
-      <html lang="en">
-        <body>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Header />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <React.StrictMode>
+      <ClerkProvider afterSignOutUrl="/sign-in">
+        <html lang="en">
+          <body>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Header />
+              {children}
+              <Footer />
+            </ThemeProvider>
+          </body>
+        </html>
+      </ClerkProvider>
+    </React.StrictMode>
   );
 }

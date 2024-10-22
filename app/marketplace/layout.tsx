@@ -8,11 +8,7 @@ export default function MarketplaceLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Header />
-
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

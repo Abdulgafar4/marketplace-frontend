@@ -17,11 +17,7 @@ export default function CleverMartLanding() {
   const { isSignedIn } = useAuth(); // Check if the user is signed in
 
   const handleCardClick = (itemId: string) => {
-    if (isSignedIn) {
-      router.push(`/marketplace/${itemId}`); // Navigate to the product detail page if signed in
-    } else {
-      router.push(`/login?redirect=/marketplace/${itemId}`); // Redirect to login page if not signed in
-    }
+    router.push(`/marketplace/${itemId}`);
   };
   const productsByCategory: ProductsByCategory = dummyProducts.reduce(
     (acc, product) => {

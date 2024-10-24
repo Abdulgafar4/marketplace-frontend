@@ -91,7 +91,7 @@ export default function Footer() {
           </div>
           <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
             <p>
-              &copy; {new Date().getFullYear()} CleverMart. All rights reserved.
+              &copy; {new Date().getFullYear()} Clevertag. All rights reserved.
             </p>
           </div>
         </div>

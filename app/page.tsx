@@ -8,7 +8,6 @@ import bsimage from "../public/assets/images/BSimage-bg.png";
 import Image from "next/image";
 import Link from "next/link";
 import { dummyProducts, testimonials } from "./api/dummyData";
-// import { useRouter } from "next/router";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 

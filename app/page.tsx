@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,91 +7,33 @@ import { Star, ShoppingCart, Shield, CreditCard } from "lucide-react";
 import bsimage from "../public/assets/images/BSimage-bg.png";
 import Image from "next/image";
 import Link from "next/link";
+import { dummyProducts, testimonials } from "./api/dummyData";
+// import { useRouter } from "next/router";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
-const products = {
-  electronics: [
-    {
-      name: "Premium Headphones",
-      price: 199.99,
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=300&h=200",
-    },
-    {
-      name: "Latest Smartphone",
-      price: 899.99,
-      image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&h=200",
-    },
-    {
-      name: "Ultra Laptop",
-      price: 1299.99,
-      image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=300&h=200",
-    },
-  ],
-  fashion: [
-    {
-      name: "Designer Watch",
-      price: 299.99,
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=300&h=200",
-    },
-    {
-      name: "Leather Handbag",
-      price: 159.99,
-      image:
-        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=300&h=200",
-    },
-    {
-      name: "Running Shoes",
-      price: 129.99,
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&h=200",
-    },
-  ],
-  home: [
-    {
-      name: "Modern Coffee Table",
-      price: 399.99,
-      image:
-        "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?q=80&w=300&h=200",
-    },
-    {
-      name: "Smart Kitchen Blender",
-      price: 179.99,
-      image:
-        "https://images.unsplash.com/photo-1570222094114-d054a817e56b?q=80&w=300&h=200",
-    },
-    {
-      name: "Decorative Lamp",
-      price: 89.99,
-      image:
-        "https://images.unsplash.com/photo-1543198126-a8ad8e47fb22?q=80&w=300&h=200",
-    },
-  ],
-};
-
-const testimonials = [
-  {
-    name: "Sarah Chen",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=50&h=50",
-    text: "CleverMart revolutionized how I sell my handmade crafts. The platform is intuitive and the community is wonderful!",
-  },
-  {
-    name: "Marcus Johnson",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=50&h=50",
-    text: "As a tech enthusiast, I love how easy it is to buy and sell electronics here. The secure payment system gives me peace of mind.",
-  },
-  {
-    name: "Emma Rodriguez",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=50&h=50",
-    text: "I've been selling home decor items for 6 months now. The support team is amazing and the sales keep growing!",
-  },
-];
 export default function CleverMartLanding() {
+  const router = useRouter();
+  const { isSignedIn } = useAuth(); // Check if the user is signed in
+
+  const handleCardClick = (itemId: string) => {
+    if (isSignedIn) {
+      router.push(`/marketplace/${itemId}`); // Navigate to the product detail page if signed in
+    } else {
+      router.push(`/login?redirect=/marketplace/${itemId}`); // Redirect to login page if not signed in
+    }
+  };
+  const productsByCategory: ProductsByCategory = dummyProducts.reduce(
+    (acc, product) => {
+      if (!acc[product.category]) {
+        acc[product.category] = [];
+      }
+      acc[product.category].push(product);
+      return acc;
+    },
+    {} as ProductsByCategory
+  );
+
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Hero Section */}
@@ -136,26 +79,34 @@ export default function CleverMartLanding() {
               <TabsTrigger value="fashion">Fashion</TabsTrigger>
               <TabsTrigger value="home">Home Goods</TabsTrigger>
             </TabsList>
-            {Object.entries(products).map(([category, items]) => (
+
+            {Object.entries(productsByCategory).map(([category, items]) => (
               <TabsContent
                 key={category}
                 value={category}
                 className="grid grid-cols-1 md:grid-cols-3 gap-8"
               >
-                {items.map((item, index) => (
+                {items.slice(0, 3).map((item) => (
                   <Card
-                    key={index}
+                    key={item.id}
                     className="overflow-hidden transition-transform hover:scale-105"
+                    onClick={() => handleCardClick(item.id)}
                   >
                     <img
-                      src={item.image}
+                      src={item.imageUrl}
                       alt={item.name}
                       className="w-full h-48 object-cover"
                     />
                     <CardContent className="p-4">
                       <h3 className="font-semibold mb-2">{item.name}</h3>
                       <p className="text-gray-600 dark:text-gray-400">
-                        ${item.price}
+                        ${item.price.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Rating: {item.rating} ⭐
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Stock: {item.stockCount}
                       </p>
                     </CardContent>
                   </Card>

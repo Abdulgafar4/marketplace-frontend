@@ -43,10 +43,11 @@ export default function CleverMartLanding() {
                 Join a trusted community of sellers and buyers.
               </p>
               <Button
+                asChild
                 size="lg"
                 className="bg-gradient-to-r from-gray-700 to-black text-white dark:from-gray-200 dark:to-white dark:text-black"
               >
-                Start Selling
+                <Link href="/sign-in">Start Selling</Link>
               </Button>
             </div>
             <div className="md:w-1/2">

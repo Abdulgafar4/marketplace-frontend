@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddProduct from "./addProduct";
-import ProductList from "./productlist";
+import ProductList from "./productList";
 
 type Product = {
   id: string;

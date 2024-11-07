@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Camera, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
-export default function OnboardingPage() {
+function Onboarding() {
   const [step, setStep] = useState(0);
   const [userData, setUserData] = useState({
     name: "",
@@ -197,3 +197,5 @@ export default function OnboardingPage() {
     </div>
   );
 }
+
+export default Onboarding;

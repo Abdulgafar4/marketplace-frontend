@@ -26,6 +26,19 @@ export default function Header() {
 
         {/* Toggle and ModeToggle for small screens */}
         <div className="flex items-center space-x-4 md:hidden">
+          {userId && path !== "/onboarding" && (
+            <>
+              <UserButton />
+            </>
+          )}
+          {!userId && (
+            <Link
+              href="/sign-in"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+            >
+              Log In
+            </Link>
+          )}
           <ModeToggle />
           <button onClick={toggleMenu} aria-label="Menu">
             {menuOpen ? <X /> : <Menu />}
@@ -81,6 +94,7 @@ export default function Header() {
               Log In
             </Link>
           )}
+
           <ModeToggle />
         </div>
       </div>
@@ -138,15 +152,6 @@ export default function Header() {
                   <span>Cart</span>
                 </Link>
               )}
-
-              <Link
-                href={userId ? "/profile" : "/sign-in"}
-                onClick={toggleMenu}
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-              >
-                <UserButton />
-                <span>Profile</span>
-              </Link>
             </nav>
           </div>
         </div>

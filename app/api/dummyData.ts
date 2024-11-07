@@ -47,7 +47,7 @@ export const dummyProducts: Product[] = [
     paymentOptions: ["Credit Card", "PayPal"],
     origin: {
       brand: "AudioTech",
-      country: "USA",
+      country: "Toronto, Ontario",
     },
     usageGuidelines: {
       careInstructions: "Clean with a soft cloth; avoid water.",

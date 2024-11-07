@@ -25,12 +25,14 @@ const Filters: React.FC<{
   priceRange: { min: number; max: number };
   handlePriceRangeChange: (value: number[]) => void;
   resetFilters: () => void;
+  location: string[];
 }> = ({
   filters,
   setFilters,
   priceRange,
   handlePriceRangeChange,
   resetFilters,
+  location,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -79,7 +81,7 @@ const Filters: React.FC<{
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="max-h-[200px] overflow-y-auto">
                     <SelectGroup>
                       <SelectLabel>Categories</SelectLabel>
                       {CATEGORIES.map((category) => (
@@ -88,6 +90,27 @@ const Filters: React.FC<{
                         </SelectItem>
                       ))}
                     </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2">City</h3>
+                <Select
+                  value={filters.location}
+                  onValueChange={(value) =>
+                    setFilters((prev: any) => ({ ...prev, location: value }))
+                  }
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Location" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[200px] overflow-y-auto">
+                    {location.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city === "all" ? "All Cities" : city}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

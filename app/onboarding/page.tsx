@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox";
 import { Camera, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import LocationInput from "@/components/onboarding/location";
 
 function Onboarding() {
   const [step, setStep] = useState(0);
@@ -66,17 +66,7 @@ function Onboarding() {
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="location">Location</Label>
-        <Input
-          id="location"
-          name="location"
-          value={userData.location}
-          onChange={handleInputChange}
-          placeholder="Enter your location"
-        />
-        <p className="text-sm text-muted-foreground">
-          Your location helps tailor product listings based on proximity.
-        </p>
+        <LocationInput value={userData.location} onChange={handleInputChange} />
       </div>
       <div className="flex justify-between">
         <Button variant="outline" onClick={handleBack}>

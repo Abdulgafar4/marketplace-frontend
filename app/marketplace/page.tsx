@@ -30,6 +30,7 @@ const Marketplace: React.FC = () => {
     category: "all",
     priceRange: [0, 1000] as [number, number],
     minRating: 0,
+    location: "all",
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,6 +41,14 @@ const Marketplace: React.FC = () => {
     return { min: Math.min(...prices), max: Math.max(...prices) };
   }, [products]);
 
+  // Get unique cities from products
+  const cities = useMemo(() => {
+    const uniqueCities = Array.from(
+      new Set(products.map((p) => p.seller.location))
+    );
+    return ["all", ...uniqueCities.sort()];
+  }, [products]);
+
   const filteredAndSortedProducts = useMemo(() => {
     return products
       .filter((product) => {
@@ -48,6 +57,9 @@ const Marketplace: React.FC = () => {
         const matchesPrice =
           product.price >= filters.priceRange[0] &&
           product.price <= filters.priceRange[1];
+        const matchesCity =
+          filters.location === "all" ||
+          product.seller.location === filters.location;
         const matchesRating = product.rating >= filters.minRating;
         const matchesSearch = searchQuery
           ? product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -57,7 +69,11 @@ const Marketplace: React.FC = () => {
           : true;
 
         return (
-          matchesCategory && matchesPrice && matchesRating && matchesSearch
+          matchesCategory &&
+          matchesPrice &&
+          matchesRating &&
+          matchesSearch &&
+          matchesCity
         );
       })
       .sort((a, b) => {
@@ -92,6 +108,7 @@ const Marketplace: React.FC = () => {
       category: "all",
       priceRange: [priceRange.min, priceRange.max],
       minRating: 0,
+      location: "all",
     });
   };
 
@@ -117,6 +134,7 @@ const Marketplace: React.FC = () => {
               priceRange={priceRange}
               handlePriceRangeChange={handlePriceRangeChange}
               resetFilters={resetFilters}
+              location={cities}
             />
           </div>
 

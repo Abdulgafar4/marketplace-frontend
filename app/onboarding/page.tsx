@@ -183,7 +183,7 @@ function Onboarding() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="w-full max-w-md p-6 bg-card rounded-lg shadow-lg">
+      <div className="w-full max-w-md p-6 bg-card rounded-lg shadow-lg mx-5">
         <div className="mb-4">
           <div className="w-full bg-muted rounded-full h-2">
             <div

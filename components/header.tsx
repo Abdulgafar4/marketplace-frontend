@@ -21,7 +21,7 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
         {/* Logo */}
         <Link href="/" className="text-xl font-extrabold italic">
-          CLEVERMART
+          CLEVERECOMART
         </Link>
 
         {/* Toggle and ModeToggle for small screens */}

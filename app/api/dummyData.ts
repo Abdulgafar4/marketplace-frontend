@@ -653,7 +653,7 @@ export const testimonials = [
     name: "Sarah Chen",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=50&h=50",
-    text: "CleverMart revolutionized how I sell my handmade crafts. The platform is intuitive and the community is wonderful!",
+    text: "CleverEcoMart revolutionized how I sell my handmade crafts. The platform is intuitive and the community is wonderful!",
   },
   {
     name: "Marcus Johnson",

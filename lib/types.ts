@@ -22,7 +22,7 @@ interface Product {
     dimensions: string;
     weight: string;
     material: string;
-    features?: string; // Optional field for extra features
+    features?: string;
   };
   shipping: {
     methods: string[];

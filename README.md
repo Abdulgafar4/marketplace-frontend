@@ -1,10 +1,11 @@
-# CleverMart
+# CleverEcoMart
 
-CleverMart is a platform for buying and selling that allows users to post, manage, and edit their products. The platform includes secure user authentication, product uploading with image support, and rich text editing for detailed product descriptions. Users can view, comment, and purchase products, while sellers can easily manage their listings. This project is built using modern web technologies and tools for both frontend and backend development, ensuring a seamless and efficient user experience.
+CleverEcoMart is a platform for buying and selling that allows users to post, manage, and edit their products. The platform includes secure user authentication, product uploading with image support, and rich text editing for detailed product descriptions. Users can view, comment, and purchase products, while sellers can easily manage their listings. This project is built using modern web technologies and tools for both frontend and backend development, ensuring a seamless and efficient user experience.
 
 ## Project Overview
 
 This marketplace offers users the ability to:
+
 - Post and edit their products with image uploads.
 - View, comment, and purchase products.
 - Leverage user authentication for a personalized experience.
@@ -36,12 +37,14 @@ This marketplace offers users the ability to:
 ## Project Setup
 
 ### Prerequisites
+
 - Install [Bun](https://bun.sh/) for efficient development.
 - Have Docker installed for PostgreSQL container management.
 
 ### Step-by-Step Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/yourusername/clever-marketplace.git
    cd clever-marketplace
@@ -49,12 +52,14 @@ This marketplace offers users the ability to:
 
 2. **Install dependencies**:
    Run this command to install dependencies using Bun:
+
    ```bash
    bun install
    ```
 
 3. **Environment Variables**:
    Create a `.env` file in the root directory and fill in the following environment variables:
+
    ```bash
    PORT=8000
    DATABASE_URL=postgresql://username:password@localhost:5432/marketplacedb
@@ -64,11 +69,13 @@ This marketplace offers users the ability to:
 
 4. **Start PostgreSQL with Docker**:
    Run the following command to start PostgreSQL with Docker:
+
    ```bash
    docker-compose up -d
    ```
 
 5. **Run the development servers**:
+
    - For Next.js frontend:
      ```bash
      bun run dev
@@ -86,12 +93,14 @@ This marketplace offers users the ability to:
 
 ### Commit History
 
-Initial project setup: 
+Initial project setup:
+
 ```
 git commit -m "Initial project setup: configured Next.js, NestJS, Clerk, PostgreSQL, Cloudinary, and other core tools"
 ```
 
 ## Future Improvements
+
 - Add payment integration for purchasing products.
 - Implement notifications for product updates.
 - Expand product categorization and search functionality.

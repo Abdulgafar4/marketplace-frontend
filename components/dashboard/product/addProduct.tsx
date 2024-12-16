@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,25 +21,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
-import ProductCategory from "./productCategory";
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  stockCount: number;
-  condition: string;
-  imageUrl: string;
-  dimensions: string;
-  weight: string;
-  material: string;
-  shippingMethods: string;
-  shippingCost: number;
-  estimatedDelivery: string;
-};
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Plus, X, Upload } from "lucide-react";
+import { CATEGORIES, CATEGORYSPEC } from "@/lib/constants";
+import Image from "next/image";
 
 const defaultProduct: Product = {
   id: "",
@@ -48,23 +35,46 @@ const defaultProduct: Product = {
   category: "",
   stockCount: 0,
   condition: "",
+  images: [],
   imageUrl: "",
-  dimensions: "",
-  weight: "",
-  material: "",
-  shippingMethods: "",
-  shippingCost: 0,
-  estimatedDelivery: "",
+  createdAt: new Date(),
+  seller: {
+    id: "",
+    name: "",
+    rating: 0,
+    sellersReviews: undefined,
+    location: "",
+    contact: "",
+    totalSales: undefined,
+  },
+  specifications: {
+    dimensions: undefined,
+    weight: undefined,
+    material: undefined,
+    features: undefined,
+    size: undefined,
+  },
+  paymentOptions: [],
+  origin: {
+    brand: "",
+    country: "",
+  },
+  usageGuidelines: {
+    careInstructions: "",
+    installation: "",
+  },
+  faq: [],
+  relatedProducts: [],
 };
 
 export default function AddProduct({
   onAddProduct,
   categories,
-  setCategories,
+  getCategoryLabel,
 }: {
   onAddProduct: (product: Product) => void;
   categories: string[];
-  setCategories: any;
+  getCategoryLabel: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState<Product>(defaultProduct);
@@ -76,208 +86,235 @@ export default function AddProduct({
     setIsOpen(false);
   };
 
-  const handleAddCategory = (newCategory: string) => {
-    setCategories((prevCategories: any) => [...prevCategories, newCategory]);
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          images: [...prevProduct.images, reader.result as string],
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: true,
+  });
+
+  const removeImage = (index: number) => {
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      images: prevProduct.images.filter((_, i) => i !== index),
+    }));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus className="mr-2 h-4 w-4" /> Add Product
+          <Plus className="md:mr-2 h-4 w-4" />
+          <span className="hidden md:inline">Add Product</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Add New Product</DialogTitle>
-          <DialogDescription>
-            Enter the details of your new product listing.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Product Name</Label>
-              <Input
-                id="name"
-                value={product.name}
-                onChange={(e) =>
-                  setProduct({ ...product, name: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="price">Price</Label>
-              <Input
-                id="price"
-                type="number"
-                step="0.01"
-                value={product.price}
-                onChange={(e) =>
-                  setProduct({ ...product, price: parseFloat(e.target.value) })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={product.description}
-                onChange={(e) =>
-                  setProduct({ ...product, description: e.target.value })
-                }
-                required
-                className="min-h-[100px]"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select
-                value={product.category}
-                onValueChange={(value) =>
-                  setProduct({ ...product, category: value })
-                }
-              >
-                <SelectTrigger id="category">
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <div>
-                    {categories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                    <div className="flex justify-center w-full">
-                      <ProductCategory
-                        categories={categories}
-                        onAddCategory={handleAddCategory}
-                      />
-                    </div>
+      <DialogContent className="sm:max-w-[800px] w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] max-h-full p-0">
+        <ScrollArea className="h-full">
+          <div className="p-6">
+            <DialogHeader>
+              <DialogTitle>Add New Product</DialogTitle>
+              <DialogDescription>
+                Enter the details of your new product listing.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div
+                    {...getRootProps()}
+                    className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                      isDragActive
+                        ? "border-primary bg-primary/10"
+                        : "border-gray-300 hover:border-primary"
+                    }`}
+                  >
+                    <input {...getInputProps()} />
+                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                    <p className="mt-2 text-sm text-gray-500">
+                      Drag 'n' drop some images here, or click to select files
+                    </p>
                   </div>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="stockCount">Stock Count</Label>
-              <Input
-                id="stockCount"
-                type="number"
-                value={product.stockCount}
-                onChange={(e) =>
-                  setProduct({
-                    ...product,
-                    stockCount: parseInt(e.target.value),
-                  })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="condition">Condition</Label>
-              <Select
-                value={product.condition}
-                onValueChange={(value) =>
-                  setProduct({ ...product, condition: value })
-                }
-              >
-                <SelectTrigger id="condition">
-                  <SelectValue placeholder="Select condition" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="used">Used</SelectItem>
-                  <SelectItem value="refurbished">Refurbished</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="imageUrl">Main Image URL</Label>
-              <Input
-                id="imageUrl"
-                type="url"
-                value={product.imageUrl}
-                onChange={(e) =>
-                  setProduct({ ...product, imageUrl: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="dimensions">Dimensions</Label>
-              <Input
-                id="dimensions"
-                value={product.dimensions}
-                onChange={(e) =>
-                  setProduct({ ...product, dimensions: e.target.value })
-                }
-                placeholder="e.g., 10x5x2 inches"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="weight">Weight</Label>
-              <Input
-                id="weight"
-                value={product.weight}
-                onChange={(e) =>
-                  setProduct({ ...product, weight: e.target.value })
-                }
-                placeholder="e.g., 2.5 lbs"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="material">Material</Label>
-              <Input
-                id="material"
-                value={product.material}
-                onChange={(e) =>
-                  setProduct({ ...product, material: e.target.value })
-                }
-                placeholder="e.g., Plastic, Metal, etc."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="shippingMethods">Shipping Methods</Label>
-              <Input
-                id="shippingMethods"
-                value={product.shippingMethods}
-                onChange={(e) =>
-                  setProduct({ ...product, shippingMethods: e.target.value })
-                }
-                placeholder="e.g., Standard, Express"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="shippingCost">Shipping Cost</Label>
-              <Input
-                id="shippingCost"
-                type="number"
-                step="0.01"
-                value={product.shippingCost}
-                onChange={(e) =>
-                  setProduct({
-                    ...product,
-                    shippingCost: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="estimatedDelivery">Estimated Delivery</Label>
-              <Input
-                id="estimatedDelivery"
-                value={product.estimatedDelivery}
-                onChange={(e) =>
-                  setProduct({ ...product, estimatedDelivery: e.target.value })
-                }
-                placeholder="e.g., 3-5 business days"
-              />
-            </div>
+                  {product.images.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                      {product.images.map((image, index) => (
+                        <div key={index} className="relative group">
+                          <Image
+                            src={image}
+                            alt={`Product ${index + 1}`}
+                            className="w-full h-24 object-cover rounded-md"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => removeImage(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Product Name</Label>
+                  <Input
+                    id="name"
+                    value={product.name}
+                    onChange={(e) =>
+                      setProduct({ ...product, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="price">Price</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    step="0.01"
+                    value={product.price}
+                    onChange={(e) =>
+                      setProduct({
+                        ...product,
+                        price: parseFloat(e.target.value),
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={product.description}
+                    onChange={(e) =>
+                      setProduct({ ...product, description: e.target.value })
+                    }
+                    required
+                    className="min-h-[100px]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select
+                    value={product.category}
+                    onValueChange={(value) =>
+                      setProduct({ ...product, category: value })
+                    }
+                  >
+                    <SelectTrigger id="category">
+                      <SelectValue placeholder="Select a category">
+                        {product.category && getCategoryLabel(product.category)}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {getCategoryLabel(category)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="stockCount">Stock Count</Label>
+                  <Input
+                    id="stockCount"
+                    type="number"
+                    value={product.stockCount}
+                    onChange={(e) =>
+                      setProduct({
+                        ...product,
+                        stockCount: parseInt(e.target.value),
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="condition">Condition</Label>
+                  <Select
+                    value={product.condition}
+                    onValueChange={(value) =>
+                      setProduct({ ...product, condition: value })
+                    }
+                  >
+                    <SelectTrigger id="condition">
+                      <SelectValue placeholder="Select condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">New</SelectItem>
+                      <SelectItem value="used">Used</SelectItem>
+                      <SelectItem value="refurbished">Refurbished</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {product.category &&
+                  (() => {
+                    // Find the corresponding category-specific fields based on product category value
+                    const categoryValue = CATEGORIES.find(
+                      (cat) => cat.value === product.category
+                    );
+
+                    if (!categoryValue) return null;
+
+                    const fields =
+                      CATEGORYSPEC[
+                        categoryValue.value as keyof typeof CATEGORYSPEC
+                      ] || [];
+
+                    return fields.map((field) => {
+                      // Get the value from the product, handle possible Date or other types
+                      const fieldValue = product[field.name as keyof Product];
+                      const stringValue =
+                        typeof fieldValue === "string" ||
+                        typeof fieldValue === "number"
+                          ? fieldValue
+                          : fieldValue instanceof Date
+                          ? fieldValue.toISOString() // Convert Date to string (you can adjust the format)
+                          : "";
+
+                      return (
+                        <div key={field.name} className="space-y-2">
+                          <Label htmlFor={field.name}>{field.label}</Label>
+                          <Input
+                            id={field.name}
+                            type={field.type}
+                            value={stringValue}
+                            onChange={(e) =>
+                              setProduct({
+                                ...product,
+                                [field.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      );
+                    });
+                  })()}
+              </div>
+              <Button type="submit" className="w-full">
+                Add Product
+              </Button>
+            </form>
           </div>
-          <Button type="submit">Add Product</Button>
-        </form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

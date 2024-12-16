@@ -13,7 +13,7 @@ export function Content({ activeTab, setActiveTab }: DashboardContentProps) {
     <Tabs
       value={activeTab}
       onValueChange={setActiveTab}
-      className="space-y-4 p-8 max-w-5xl mx-auto"
+      className="space-y-4 p-8 w-full mx-auto"
     >
       {/* Center the TabsList and set max width */}
       <TabsList className="flex justify-center space-x-4 w-full max-w-sm mx-auto">
@@ -21,10 +21,10 @@ export function Content({ activeTab, setActiveTab }: DashboardContentProps) {
         <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="products" className="space-y-4">
+      <TabsContent value="products" className="space-y-4 max-w-7xl mx-auto">
         <ProductContent />
       </TabsContent>
-      <TabsContent value="settings" className="space-y-4">
+      <TabsContent value="settings" className="space-y-4 max-w-7xl mx-auto">
         <div>Settings content goes here</div>
       </TabsContent>
     </Tabs>

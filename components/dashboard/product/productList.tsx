@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -24,23 +23,6 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import EditProduct from "./editProduct";
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  stockCount: number;
-  condition: string;
-  imageUrl: string;
-  dimensions: string;
-  weight: string;
-  material: string;
-  shippingMethods: string;
-  shippingCost: number;
-  estimatedDelivery: string;
-};
-
 export default function ProductList({
   products,
   onEditProduct,
@@ -61,11 +43,6 @@ export default function ProductList({
           <TableHead className="hidden md:table-cell">Category</TableHead>
           <TableHead className="hidden md:table-cell">Stock</TableHead>
           <TableHead className="hidden lg:table-cell">Condition</TableHead>
-          <TableHead className="hidden lg:table-cell">Material</TableHead>
-          <TableHead className="hidden xl:table-cell">Shipping Cost</TableHead>
-          <TableHead className="hidden xl:table-cell">
-            Estimated Delivery
-          </TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -80,18 +57,10 @@ export default function ProductList({
             <TableCell className="hidden md:table-cell">
               {product.stockCount}
             </TableCell>
-            <TableCell className="hidden lg:table-cell">
+            <TableCell className="hidden md:table-cell">
               {product.condition}
             </TableCell>
-            <TableCell className="hidden lg:table-cell">
-              {product.material}
-            </TableCell>
-            <TableCell className="hidden xl:table-cell">
-              ${product.shippingCost.toFixed(2)}
-            </TableCell>
-            <TableCell className="hidden xl:table-cell">
-              {product.estimatedDelivery}
-            </TableCell>
+
             <TableCell>
               <div className="flex space-x-2">
                 <EditProduct

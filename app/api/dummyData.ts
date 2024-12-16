@@ -648,12 +648,222 @@ export const dummyProducts: Product[] = [
   },
 ];
 
+export const dummyCatProducts: ProductsByCategory = {
+  electronics_appliances: [
+    {
+      id: "1",
+      name: "4K Ultra HD Smart TV",
+      price: 899.99,
+      description:
+        "A high-definition smart TV with a 55-inch display and Alexa support.",
+      imageUrl: "https://example.com/tv.jpg",
+      category: "electronics_appliances",
+      stockCount: 150,
+      createdAt: new Date("2024-01-15"),
+      seller: {
+        id: "seller1",
+        name: "Tech Store",
+        rating: 4.5,
+        location: "New York, USA",
+        contact: "contact@techstore.com",
+        totalSales: 5000,
+      },
+      condition: "New",
+      specifications: {
+        dimensions: "48 x 28 x 3 inches",
+        weight: "24 lbs",
+        material: "Plastic, Glass",
+        features: "Alexa, Smart Apps, 4K UHD, HDR",
+      },
+      shipping: {
+        methods: ["Standard", "Express"],
+        cost: 25.0,
+        estimatedDelivery: "3-5 business days",
+      },
+      paymentOptions: ["Credit Card", "PayPal", "Apple Pay"],
+      origin: {
+        brand: "Samsung",
+        country: "South Korea",
+      },
+      usageGuidelines: {
+        careInstructions: "Use a microfiber cloth to clean the screen.",
+        installation:
+          "Follow the installation manual or use a professional installer.",
+      },
+      images: ["https://example.com/tv1.jpg", "https://example.com/tv2.jpg"],
+      faq: [
+        {
+          question: "Does it support Netflix?",
+          answer: "Yes, it supports Netflix and other streaming services.",
+        },
+        {
+          question: "Is the remote voice-activated?",
+          answer: "Yes, the remote has Alexa integration.",
+        },
+      ],
+      relatedProducts: ["2", "3"],
+      warranty: "2 years",
+      reviews: [
+        {
+          id: "review1",
+          userId: "user1",
+          userName: "John Doe",
+          productId: "1",
+          rating: 5,
+          comment: "Excellent TV with great picture quality!",
+          createdAt: new Date("2024-02-01"),
+          helpfulCount: 10,
+        },
+      ],
+      rating: 4.7,
+    },
+  ],
+  fashion: [
+    {
+      id: "2",
+      name: "Leather Jacket",
+      price: 199.99,
+      description: "A stylish leather jacket with a classic design.",
+      imageUrl: "https://example.com/jacket.jpg",
+      category: "fashion",
+      stockCount: 25,
+      createdAt: new Date("2024-02-10"),
+      seller: {
+        id: "seller2",
+        name: "Fashion Hub",
+        rating: 4.2,
+        location: "Los Angeles, USA",
+        contact: "contact@fashionhub.com",
+      },
+      condition: "New",
+      specifications: {
+        material: "Genuine Leather",
+        features: "Zipper closure, Slim Fit",
+        size: "M, L, XL",
+      },
+      shipping: {
+        methods: ["Standard"],
+        cost: 5.0,
+        estimatedDelivery: "5-7 business days",
+      },
+      paymentOptions: ["Credit Card", "PayPal"],
+      origin: {
+        brand: "Style Co.",
+        country: "USA",
+      },
+      usageGuidelines: {
+        careInstructions: "Dry clean only.",
+        installation: "No installation required.",
+      },
+      images: [
+        "https://example.com/jacket1.jpg",
+        "https://example.com/jacket2.jpg",
+      ],
+      faq: [
+        {
+          question: "What is the size of the model?",
+          answer: "The model is wearing a size M.",
+        },
+        {
+          question: "Is it suitable for winter?",
+          answer: "Yes, it provides moderate warmth.",
+        },
+      ],
+      relatedProducts: ["1", "3"],
+      reviews: [
+        {
+          id: "review2",
+          userId: "user2",
+          userName: "Jane Smith",
+          productId: "2",
+          rating: 4,
+          comment: "Great jacket, but runs a bit small.",
+          createdAt: new Date("2024-02-12"),
+          helpfulCount: 5,
+        },
+      ],
+      rating: 4.2,
+    },
+  ],
+  home_garden: [
+    {
+      id: "3",
+      name: "Outdoor Patio Furniture Set",
+      price: 349.99,
+      description: "A 5-piece patio furniture set, perfect for your backyard.",
+      imageUrl: "https://example.com/patio.jpg",
+      category: "home_garden",
+      stockCount: 50,
+      createdAt: new Date("2024-03-01"),
+      seller: {
+        id: "seller3",
+        name: "Garden Decor",
+        rating: 4.8,
+        location: "Chicago, USA",
+        contact: "contact@gardendecor.com",
+        totalSales: 1500,
+      },
+      condition: "New",
+      specifications: {
+        dimensions: "48 x 24 x 24 inches (Table)",
+        weight: "60 lbs",
+        material: "Wicker, Aluminum",
+      },
+      shipping: {
+        methods: ["Standard", "Express"],
+        cost: 50.0,
+        estimatedDelivery: "7-10 business days",
+      },
+      paymentOptions: ["Credit Card", "PayPal", "Stripe"],
+      origin: {
+        brand: "HomeStyle",
+        country: "USA",
+      },
+      usageGuidelines: {
+        careInstructions: "Store in a dry place when not in use.",
+        installation: "Assembly required. Tools and instructions included.",
+      },
+      images: [
+        "https://example.com/patio1.jpg",
+        "https://example.com/patio2.jpg",
+      ],
+      faq: [
+        {
+          question: "Is the cushion removable?",
+          answer: "Yes, the cushion covers are removable and machine washable.",
+        },
+        {
+          question: "Can it be used indoors?",
+          answer: "Yes, but it is designed for outdoor use.",
+        },
+      ],
+      relatedProducts: ["1", "2"],
+      warranty: "1 year",
+      reviews: [
+        {
+          id: "review3",
+          userId: "user3",
+          userName: "Mark Lee",
+          productId: "3",
+          rating: 5,
+          comment: "Very comfortable and easy to assemble!",
+          createdAt: new Date("2024-03-05"),
+          helpfulCount: 8,
+        },
+      ],
+      rating: 4.9,
+    },
+  ],
+};
+
+export default dummyProducts;
+
 export const testimonials = [
   {
     name: "Sarah Chen",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=50&h=50",
-    text: "CleverEcoMart revolutionized how I sell my handmade crafts. The platform is intuitive and the community is wonderful!",
+    text: "CleverMart revolutionized how I sell my handmade crafts. The platform is intuitive and the community is wonderful!",
   },
   {
     name: "Marcus Johnson",

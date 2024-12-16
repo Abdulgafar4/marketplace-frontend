@@ -1,6 +1,6 @@
-# CleverEcoMart
+# CleverMart
 
-CleverEcoMart is a platform for buying and selling that allows users to post, manage, and edit their products. The platform includes secure user authentication, product uploading with image support, and rich text editing for detailed product descriptions. Users can view, comment, and purchase products, while sellers can easily manage their listings. This project is built using modern web technologies and tools for both frontend and backend development, ensuring a seamless and efficient user experience.
+CleverMart is a platform for buying and selling that allows users to post, manage, and edit their products. The platform includes secure user authentication, product uploading with image support, and rich text editing for detailed product descriptions. Users can view, comment, and purchase products, while sellers can easily manage their listings. This project is built using modern web technologies and tools for both frontend and backend development, ensuring a seamless and efficient user experience.
 
 ## Project Overview
 

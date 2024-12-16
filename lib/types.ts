@@ -3,10 +3,9 @@ interface Product {
   name: string;
   price: number;
   description: string;
-  category: string;
-  rating: number;
-  stockCount: number;
   imageUrl: string;
+  category: string;
+  stockCount: number;
   createdAt: Date;
   seller: {
     id: string;
@@ -19,17 +18,20 @@ interface Product {
   };
   condition: string;
   specifications: {
-    dimensions: string;
-    weight: string;
-    material: string;
-    features?: string;
+    dimensions?: string; // Optional as not all categories have dimensions
+    weight?: string; // Optional
+    material?: string; // Optional
+    features?: string; // Optional
+    size?: string;
   };
-  shipping: {
+  shipping?: {
+    // Optional shipping details
     methods: string[];
     cost: number;
     estimatedDelivery: string;
   };
-  returnPolicy: {
+  returnPolicy?: {
+    // Optional return policy
     returnWindow: string;
     conditions: string;
   };
@@ -42,11 +44,45 @@ interface Product {
     careInstructions: string;
     installation: string;
   };
-  images: string[]; // Additional images for the product
+  images: string[]; // Array of image URLs
   faq: { question: string; answer: string }[]; // FAQ items
   relatedProducts: string[]; // IDs of related products
-  warranty: string; // Warranty information
-  reviews?: Review[];
+  warranty?: string; // Optional as not all products may have a warranty
+  reviews?: Review[]; // Optional as reviews may not exist initially
+  rating?: number; // Optional as some products may not have ratings
+  // Category-specific fields (optional, based on category)
+  categorySpecificFields?: {
+    brand?: string; // Optional in categories where brand isn't required
+    model?: string; // Optional in categories like 'furniture'
+    powerSource?: string; // Optional for categories like 'furniture' or 'baby_kids'
+    voltage?: string; // Optional for certain categories
+    color?: string; // Optional, only applicable to certain categories
+    size?: string; // Optional for 'fashion' categories
+    assemblyRequired?: boolean; // Optional for 'furniture' only
+    safetyStandards?: string; // Optional for 'baby_kids' only
+    material?: string; // Optional for categories like 'furniture', 'home_garden', 'health_beauty'
+    type?: string; // Optional for many categories like 'games_hobbies', 'sports_outdoors', etc.
+    occasion?: string; // Optional for 'womens_fashion'
+    fit?: string; // Optional for 'mens_fashion'
+    expiryDate?: string; // Optional for 'health_beauty'
+    ingredients?: string; // Optional for 'health_beauty'
+    skinType?: string; // Optional for 'health_beauty'
+    volume?: string; // Optional for 'health_beauty'
+    weatherResistance?: string; // Optional for 'home_garden'
+    mileage?: string; // Optional for 'vehicles_parts'
+    fuelType?: string; // Optional for 'vehicles_parts'
+    artist?: string; // Optional for 'art_collectibles'
+    medium?: string; // Optional for 'art_collectibles'
+    provenance?: string; // Optional for 'art_collectibles'
+    year?: string; // Optional for 'games_hobbies', 'books_music', 'vehicles_parts'
+    urgency?: string; // Optional for 'wanted'
+    preferredCondition?: string; // Optional for 'wanted'
+    budget?: string; // Optional for 'wanted'
+    eventDate?: string; // Optional for 'garage_sales'
+    location?: string; // Optional for 'garage_sales'
+    items?: string; // Optional for 'garage_sales'
+    contactInfo?: string; // Optional for 'garage_sales'
+  };
 }
 
 interface Review {

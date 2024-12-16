@@ -22,23 +22,6 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  stockCount: number;
-  condition: string;
-  imageUrl: string;
-  dimensions: string;
-  weight: string;
-  material: string;
-  shippingMethods: string;
-  shippingCost: number;
-  estimatedDelivery: string;
-};
-
 export default function EditProduct({
   product,
   onEditProduct,
@@ -186,88 +169,6 @@ export default function EditProduct({
                   })
                 }
                 required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="dimensions">Dimensions</Label>
-              <Input
-                id="dimensions"
-                value={editedProduct.dimensions}
-                onChange={(e) =>
-                  setEditedProduct({
-                    ...editedProduct,
-                    dimensions: e.target.value,
-                  })
-                }
-                placeholder="e.g., 10x5x2 inches"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="weight">Weight</Label>
-              <Input
-                id="weight"
-                value={editedProduct.weight}
-                onChange={(e) =>
-                  setEditedProduct({ ...editedProduct, weight: e.target.value })
-                }
-                placeholder="e.g., 2.5 lbs"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="material">Material</Label>
-              <Input
-                id="material"
-                value={editedProduct.material}
-                onChange={(e) =>
-                  setEditedProduct({
-                    ...editedProduct,
-                    material: e.target.value,
-                  })
-                }
-                placeholder="e.g., Plastic, Metal, etc."
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="shippingMethods">Shipping Methods</Label>
-              <Input
-                id="shippingMethods"
-                value={editedProduct.shippingMethods}
-                onChange={(e) =>
-                  setEditedProduct({
-                    ...editedProduct,
-                    shippingMethods: e.target.value,
-                  })
-                }
-                placeholder="e.g., Standard, Express"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="shippingCost">Shipping Cost</Label>
-              <Input
-                id="shippingCost"
-                type="number"
-                step="0.01"
-                value={editedProduct.shippingCost}
-                onChange={(e) =>
-                  setEditedProduct({
-                    ...editedProduct,
-                    shippingCost: parseFloat(e.target.value),
-                  })
-                }
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="estimatedDelivery">Estimated Delivery</Label>
-              <Input
-                id="estimatedDelivery"
-                value={editedProduct.estimatedDelivery}
-                onChange={(e) =>
-                  setEditedProduct({
-                    ...editedProduct,
-                    estimatedDelivery: e.target.value,
-                  })
-                }
-                placeholder="e.g., 3-5 business days"
               />
             </div>
           </div>

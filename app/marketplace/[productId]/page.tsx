@@ -96,6 +96,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
             </div>
           </CollapsibleSection>
 
+          { product.shipping &&
           <CollapsibleSection
             title="Shipping Information"
             isOpen={openSections.shippingInfo}
@@ -126,7 +127,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
               </div>
             </div>
           </CollapsibleSection>
-
+          }
           <CollapsibleSection
             title="Warranty & Return Policy"
             isOpen={openSections.warrantyInfo}
@@ -145,17 +146,21 @@ function ProductPage({ params }: { params: { productId: string } }) {
                 <span className="text-sm font-medium text-gray-500">
                   Return Window
                 </span>
+                {product.returnPolicy &&
                 <span className="text-sm text-gray-900">
                   {product?.returnPolicy.returnWindow}
                 </span>
+                }
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-500">
                   Conditions
                 </span>
+                {product.returnPolicy &&
                 <span className="text-sm text-gray-900">
                   {product?.returnPolicy.conditions}
                 </span>
+                }
               </div>
             </div>
           </CollapsibleSection>

@@ -60,7 +60,7 @@ const Marketplace: React.FC = () => {
         const matchesCity =
           filters.location === "all" ||
           product.seller.location === filters.location;
-        const matchesRating = product.rating >= filters.minRating;
+        const matchesRating = product.rating && (product?.rating >= filters.minRating);
         const matchesSearch = searchQuery
           ? product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.description
@@ -83,7 +83,7 @@ const Marketplace: React.FC = () => {
           case "price-desc":
             return b.price - a.price;
           case "rating":
-            return b.rating - a.rating;
+            return b.rating && a.rating ? b?.rating - a?.rating : 0;
           case "newest":
             return b.createdAt.getTime() - a.createdAt.getTime();
           default:

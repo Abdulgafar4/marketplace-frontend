@@ -44,6 +44,7 @@ const ProductCard: React.FC<{
               <Star
                 key={i}
                 className={`w-4 h-4 ${
+                  product.rating &&
                   i < product.rating
                     ? "fill-yellow-400 text-yellow-400"
                     : "text-gray-300"

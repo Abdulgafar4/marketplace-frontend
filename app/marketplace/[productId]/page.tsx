@@ -107,13 +107,13 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Methods
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.shipping.methods.join(", ")}
+                  {product?.shipping.methods.join(", ")}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-500">Cost</span>
                 <span className="text-sm text-gray-900">
-                  ${product.shipping.cost.toFixed(2)}
+                  ${product?.shipping.cost.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -121,7 +121,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Estimated Delivery
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.shipping.estimatedDelivery}
+                  {product?.shipping.estimatedDelivery}
                 </span>
               </div>
             </div>
@@ -146,7 +146,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Return Window
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.returnPolicy.returnWindow}
+                  {product?.returnPolicy.returnWindow}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -154,7 +154,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Conditions
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.returnPolicy.conditions}
+                  {product?.returnPolicy.conditions}
                 </span>
               </div>
             </div>

@@ -1,65 +1,75 @@
 const people = [
-    {
-        name: 'Abdulgafar Tajudeen',
-        role: 'Co-Founder / CEO',
-        imageUrl: '/assets/MPP.png',
-    },
-    {
-        name: 'Naveed Muhammed',
-        role: 'Software Engineer',
-        imageUrl:'/assets/userPhoto.jpg',
-    },
-    {
-        name: 'Osman Karhaman',
-        role: 'Frontend Engineer',
-        imageUrl:'/assets/userPhoto.jpg',
-    },
-    {
-        name: 'As-Saad Sheriff',
-        role: 'Backend Engineer',
-        imageUrl:'/assets/userPhoto.jpg',
-    },
-    {
-        name: 'Toyo Akpam',
-        role: 'Mobile Developer',
-        imageUrl:'/assets/userPhoto.jpg',
-    },
-    {
-
-        name: 'Adil Partel',
-        role: 'Software Tester',
-        imageUrl:'/assets/userPhoto.jpg',
-    },
-    // More people...
-]
+  {
+    name: "Abdulgafar Tajudeen",
+    role: "Co-Founder / CEO",
+    imageUrl: "/assets/MPP.png",
+  },
+  {
+    name: "Naveed Muhammed",
+    role: "Software Engineer",
+    imageUrl: "/assets/userPhoto.jpg",
+  },
+  {
+    name: "Osman Karhaman",
+    role: "Frontend Engineer",
+    imageUrl: "/assets/userPhoto.jpg",
+  },
+  {
+    name: "As-Saad Sheriff",
+    role: "Backend Engineer",
+    imageUrl: "/assets/userPhoto.jpg",
+  },
+  {
+    name: "Toyo Akpam",
+    role: "Mobile Developer",
+    imageUrl: "/assets/userPhoto.jpg",
+  },
+  {
+    name: "Adil Partel",
+    role: "Software Tester",
+    imageUrl: "/assets/userPhoto.jpg",
+  },
+  // More people...
+];
 
 export default function TeamSection() {
-    return (
-        <div className="bg-white py-24 sm:py-32">
-            <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-8 xl:grid-cols-3">
-                <div className="max-w-xl">
-                    <h2 className="text-pretty text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
-                        Meet our team
-                    </h2>
-                    <p className="mt-6 text-lg/8 text-gray-600">
-                        We’re a dynamic group of individuals who are passionate about what we do and dedicated to delivering the
-                        best results for our clients.
-                    </p>
-                </div>
-                <ul role="list" className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2">
-                    {people.map((person) => (
-                        <li key={person.name}>
-                            <div className="flex items-center gap-x-6">
-                                <img alt="" src={person.imageUrl} className="size-16 rounded-full" />
-                                <div>
-                                    <h3 className="text-base/7 font-semibold tracking-tight text-gray-900">{person.name}</h3>
-                                    <p className="text-sm/6 font-semibold text-gray-600">{person.role}</p>
-                                </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+  return (
+    <div className="bg-gray-100 dark:bg-gray-900 py-24 sm:py-32">
+      <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-8 xl:grid-cols-3">
+        <div className="max-w-xl">
+          <h2 className="text-pretty text-3xl font-semibold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            Meet our team
+          </h2>
+          <p className="mt-6 text-lg/8 text-gray-600 dark:text-gray-300">
+            We’re a dynamic group of individuals who are passionate about what
+            we do and dedicated to delivering the best results for our clients.
+          </p>
         </div>
-    )
+        <ul
+          role="list"
+          className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2"
+        >
+          {people.map((person) => (
+            <li key={person.name}>
+              <div className="flex items-center gap-x-6">
+                <img
+                  alt=""
+                  src={person.imageUrl}
+                  className="size-16 rounded-full"
+                />
+                <div>
+                  <h3 className="text-base/7 font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {person.name}
+                  </h3>
+                  <p className="text-sm/6 font-semibold text-gray-600 dark:text-gray-400">
+                    {person.role}
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }

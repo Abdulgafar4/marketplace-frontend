@@ -7,6 +7,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ModeToggle } from "@/components/modeToggle";
 import { ClevertagLogo } from "@/components/cleverlogo";
+import { Button } from "./ui/button";
 
 const navigation = [
   { name: "Marketplace", href: "/marketplace" },
@@ -27,21 +28,21 @@ export default function Header() {
       >
         <div className="flex lg:flex-1">
           <a href="/" className="flex items-center -m-1.5 p-1.5">
-            <ClevertagLogo className="h-8 w-8 text-blue-600 dark:text-blue-400 mr-[10px]" />
+            <ClevertagLogo className="h-8 w-8 mr-[10px]" />
             <span className="sr-only sm:not-sr-only  text-xl font-semibold text-gray-900 dark:text-white">
               CleverMart
             </span>
           </a>
         </div>
         <div className="flex lg:hidden">
-          <button
+          <Button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex mr-[5px] items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
           >
             <span className="sr-only">Open main menu</span>
             <Bars3Icon className="size-6" aria-hidden="true" />
-          </button>
+          </Button>
           <ModeToggle />
         </div>
         <div className="hidden lg:flex lg:gap-x-12">

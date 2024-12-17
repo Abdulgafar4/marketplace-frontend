@@ -35,14 +35,14 @@ export default function Header() {
           </a>
         </div>
         <div className="flex lg:hidden">
-          <Button
+          <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
             className="-m-2.5 inline-flex mr-[5px] items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
           >
             <span className="sr-only">Open main menu</span>
             <Bars3Icon className="size-6" aria-hidden="true" />
-          </Button>
+          </button>
           <ModeToggle />
         </div>
         <div className="hidden lg:flex lg:gap-x-12">

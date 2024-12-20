@@ -2,24 +2,35 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import LocationInput from "@/components/onboarding/location";
+import {InputField} from "@/components/onboarding/inputField";
+import {useUser} from "@clerk/nextjs";
+import { toast } from "react-toastify";
+import FaceVerification from "@/components/onboarding/faceVerification";
 
 function Onboarding() {
   const [step, setStep] = useState(0);
   const [userData, setUserData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
+    username: "",
     location: "",
     faceVerified: false,
     dataConsent: false,
   });
 
+  const { user } = useUser()
+
+  console.log(user);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+
+    const { name, value } = e.target;
+    setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleNext = () => {
@@ -30,79 +41,102 @@ function Onboarding() {
     setStep(step - 1);
   };
 
-  const handleFaceVerification = () => {
-    // Simulating face verification process
-    setTimeout(() => {
-      setUserData({ ...userData, faceVerified: true });
+  const handleVerificationComplete = (verified: boolean): void => {
+    setUserData((prev) => ({ ...prev, faceVerified: verified }));
+  };
+
+  const handleInfo = async (data: any) => {
+    try {
+      if (!user) {
+        toast.error("User not found");
+        return;
+      }
+
+      await user.update({
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+
+      if (data.username) {
+        await user.update({
+          username: data.username,
+        });
+      }
+
+      toast.success("Info Saved Successfully");
       handleNext();
-    }, 2000);
+    } catch (error) {
+      console.error('Update error:', error);
+      toast.error(error instanceof Error ? error.message : "Failed to update information");
+    }
   };
 
   const steps = [
-    // Welcome Step
     <div key="welcome" className="space-y-4">
       <h2 className="text-2xl font-bold">Welcome to CLEVERMART</h2>
       <p>
-        Join our trusted community of buyers and sellers. At CLEVERMART, we
-        prioritize safety, trust, and community values.
+        The Ultimate Marketplace for Everything!
+        Discover a smarter way to buy, sell, and trade. Refresh your wardrobe, upgrade your home, and clear out your garage without breaking the bank.
+        Connect with trusted people, save money, and give preloved items a second life. CleverMart makes it
+        easy to turn your clutter into cash and find great deals in your community. Start your journey today – because smart shopping starts here!
       </p>
       <Button onClick={handleNext}>Next</Button>
     </div>,
 
-    // Basic Information Step
     <div key="basic-info" className="space-y-4">
       <h2 className="text-2xl font-bold">Basic Information</h2>
       <div className="space-y-2">
-        <Label htmlFor="name">Full Name</Label>
-        <Input
-          id="name"
-          name="name"
-          value={userData.name}
-          onChange={handleInputChange}
-          placeholder="Enter your full name"
+        <InputField
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            value={userData.firstName}
+            onChange={handleInputChange}
+            placeholder="Enter your First Name"
         />
-        <p className="text-sm text-muted-foreground">
-          Your name enhances your profile's trustworthiness.
-        </p>
+        <InputField
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            value={userData.lastName}
+            onChange={handleInputChange}
+            placeholder="Enter your Last Name"
+        />
+        <InputField
+            id="username"
+            name="username"
+            label="Username"
+            value={userData.username}
+            onChange={handleInputChange}
+            placeholder="Enter your Username"
+        />
+
       </div>
+      <p className="text-sm text-muted-foreground">
+        Your name enhances your profile's trustworthiness.
+      </p>
       <div className="space-y-2">
-        <LocationInput value={userData.location} onChange={handleInputChange} />
+        <LocationInput value={userData.location} onChange={handleInputChange}/>
       </div>
       <div className="flex justify-between">
         <Button variant="outline" onClick={handleBack}>
           Back
         </Button>
         <Button
-          onClick={handleNext}
-          disabled={!userData.name || !userData.location}
+            disabled={!userData.firstName || !userData.lastName || !userData.location}
+            onClick={() => handleInfo(userData)}
         >
           Next
         </Button>
       </div>
     </div>,
 
-    // Face Verification Step
-    <div key="face-verification" className="space-y-4">
-      <h2 className="text-2xl font-bold">Face Verification</h2>
-      <p>
-        Complete a quick face verification to earn your Trust Badge and build
-        credibility with other users.
-      </p>
-      <div className="flex justify-center">
-        <div className="w-64 h-64 bg-muted rounded-lg flex items-center justify-center">
-          <Camera size={64} />
-        </div>
-      </div>
-      <Button onClick={handleFaceVerification} className="w-full">
-        Start Verification
-      </Button>
-      <div className="flex justify-between">
-        <Button variant="outline" onClick={handleBack}>
-          Back
-        </Button>
-        <Button onClick={handleNext}>Skip for now</Button>
-      </div>
-    </div>,
+    <FaceVerification
+        key="face-verification"
+        onBack={handleBack}
+        onNext={handleNext}
+        onVerification={handleVerificationComplete}
+    />,
 
     // Privacy and Security Step
     <div key="privacy" className="space-y-4">

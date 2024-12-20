@@ -122,9 +122,8 @@ const Marketplace: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-black text-gray-900 dark:text-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <SearchBar onSearch={setSearchQuery} />
+    <div className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-50 min-h-screen">
+      <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
         <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8">
           <div className="w-full lg:w-1/4">
@@ -135,6 +134,7 @@ const Marketplace: React.FC = () => {
               handlePriceRangeChange={handlePriceRangeChange}
               resetFilters={resetFilters}
               location={cities}
+              setSearchQuery={setSearchQuery}
             />
           </div>
 
@@ -177,7 +177,7 @@ const Marketplace: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  gap-6">
               {currentProducts.map((product) => (
                 <ProductCard
                   key={product.id}

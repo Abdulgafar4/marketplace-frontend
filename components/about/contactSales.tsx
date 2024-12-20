@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
-// import { toast } from 'react-toastify'
 import emailjs from "emailjs-com";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // import the CSS
-import { Field, Label, Switch } from "@headlessui/react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 export default function ContactSales() {

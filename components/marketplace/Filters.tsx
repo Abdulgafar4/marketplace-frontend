@@ -18,6 +18,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import SearchBar from "@/components/marketplace/SearchBar";
 
 const Filters: React.FC<{
   filters: any;
@@ -26,6 +27,7 @@ const Filters: React.FC<{
   handlePriceRangeChange: (value: number[]) => void;
   resetFilters: () => void;
   location: string[];
+  setSearchQuery: (query: string) => void;
 }> = ({
   filters,
   setFilters,
@@ -33,6 +35,8 @@ const Filters: React.FC<{
   handlePriceRangeChange,
   resetFilters,
   location,
+                       setSearchQuery,
+
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -48,7 +52,7 @@ const Filters: React.FC<{
   }, []);
 
   return (
-    <Card>
+    <Card className="lg:max-w-[350px]">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader>
           <CollapsibleTrigger asChild>
@@ -67,109 +71,113 @@ const Filters: React.FC<{
 
         <CollapsibleContent>
           <CardContent>
-            <div className="space-y-6">
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Category
-                </label>
-                <Select
-                  value={filters.category}
-                  onValueChange={(value) =>
-                    setFilters({ ...filters, category: value })
-                  }
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[200px] overflow-y-auto">
-                    <SelectGroup>
-                      <SelectLabel>Categories</SelectLabel>
-                      {CATEGORIES.map((category) => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2">City</h3>
-                <Select
-                  value={filters.location}
-                  onValueChange={(value) =>
-                    setFilters((prev: any) => ({ ...prev, location: value }))
-                  }
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select Location" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[200px] overflow-y-auto">
-                    {location.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city === "all" ? "All Cities" : city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Price Range: ${filters.priceRange[0]} - $
-                  {filters.priceRange[1]}
-                </label>
-                <Slider
-                  defaultValue={[priceRange.min, priceRange.max]}
-                  min={priceRange.min}
-                  max={priceRange.max}
-                  step={10}
-                  onValueChange={handlePriceRangeChange}
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2 text-gray-900 dark:text-gray-100">
-                  Minimum Rating
-                </label>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <Button
-                      key={rating}
-                      variant={
-                        filters.minRating >= rating ? "default" : "ghost"
-                      }
-                      size="sm"
-                      onClick={() =>
-                        setFilters({ ...filters, minRating: rating })
-                      }
-                      className={`${
-                        filters.minRating >= rating
-                          ? "bg-gray-800 text-white"
-                          : "text-gray-900 dark:text-gray-200"
-                      }`}
-                    >
-                      <Star
-                        className={`w-4 h-4 ${
-                          filters.minRating >= rating
-                            ? "fill-current text-white"
-                            : "fill-gray-500 dark:fill-gray-400"
-                        }`}
-                      />
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={resetFilters}
-              >
-                Reset Filters
-              </Button>
+            <div className="mb-6">
+              <SearchBar onSearch={setSearchQuery}/>
             </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="text-lg font-medium block mb-2">
+                    Category
+                  </label>
+                  <Select
+                      value={filters.category}
+                      onValueChange={(value) =>
+                          setFilters({...filters, category: value})
+                      }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category"/>
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] overflow-y-auto">
+                      <SelectGroup>
+                        <SelectLabel>Categories</SelectLabel>
+                        {CATEGORIES.map((category) => (
+                            <SelectItem key={category.value} value={category.value}>
+                              {category.label}
+                            </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium mb-2">City</h3>
+                  <Select
+                      value={filters.location}
+                      onValueChange={(value) =>
+                          setFilters((prev: any) => ({...prev, location: value}))
+                      }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Location"/>
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] overflow-y-auto">
+                      {location.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city === "all" ? "All Cities" : city}
+                          </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium block mb-2">
+                    Price Range: ${filters.priceRange[0]} - $
+                    {filters.priceRange[1]}
+                  </label>
+                  <Slider
+                      defaultValue={[priceRange.min, priceRange.max]}
+                      min={priceRange.min}
+                      max={priceRange.max}
+                      step={10}
+                      onValueChange={handlePriceRangeChange}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium block mb-2 text-gray-900 dark:text-gray-100">
+                    Minimum Rating
+                  </label>
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                        <Button
+                            key={rating}
+                            variant={
+                              filters.minRating >= rating ? "default" : "ghost"
+                            }
+                            size="sm"
+                            onClick={() =>
+                                setFilters({...filters, minRating: rating})
+                            }
+                            className={`${
+                                filters.minRating >= rating
+                                    ? "bg-gray-800 text-white"
+                                    : "text-gray-900 dark:text-gray-200"
+                            }`}
+                        >
+                          <Star
+                              className={`w-4 h-4 ${
+                                  filters.minRating >= rating
+                                      ? "fill-current text-white"
+                                      : "fill-gray-500 dark:fill-gray-400"
+                              }`}
+                          />
+                        </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={resetFilters}
+                >
+                  Reset Filters
+                </Button>
+              </div>
           </CardContent>
         </CollapsibleContent>
       </Collapsible>

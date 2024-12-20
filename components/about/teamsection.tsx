@@ -20,7 +20,7 @@ const people = [
     imageUrl: "/assets/userPhoto.jpg",
   },
   {
-    name: "Toyo Akpam",
+    name: "David Adeyemi",
     role: "Mobile Developer",
     imageUrl: "/assets/userPhoto.jpg",
   },

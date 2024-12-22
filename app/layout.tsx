@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import React from "react";
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
+import {Providers} from "@/app/providers";
 
 export const metadata: Metadata = {
   title: "CleverMart",
@@ -29,12 +30,20 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Providers>
+
             <Header />
             {children}
             <Footer />
+            </Providers>
+
           </ThemeProvider>
         </ClerkProvider>
-        <ToastContainer />
+        <ToastContainer
+            position= "top-center"
+        autoClose={2000}
+        closeOnClick={true}
+        />
       </body>
     </html>
   );

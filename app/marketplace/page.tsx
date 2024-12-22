@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import { dummyProducts } from "../api/dummyData";
 import { SORT_OPTIONS } from "@/lib/constants";
-import SearchBar from "@/components/marketplace/SearchBar";
 import Filters from "@/components/marketplace/Filters";
 import ProductCard from "@/components/marketplace/ProductCard";
 import {
@@ -22,6 +21,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {useWishlist} from "@/lib/hooks/useWishlist";
 
 const Marketplace: React.FC = () => {
   const [products] = useState<Product[]>(dummyProducts);
@@ -35,6 +35,7 @@ const Marketplace: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
+  const { data: wishlistItems = [] } = useWishlist();
 
   const priceRange = useMemo(() => {
     const prices = products.map((p) => p.price);
@@ -121,135 +122,152 @@ const Marketplace: React.FC = () => {
     setCurrentPage(1);
   };
 
+  const productsWithWishlistStatus = React.useMemo(() => {
+    const wishlistSet = new Set(wishlistItems.map(item => item.id)); // Faster lookup with Set
+    return currentProducts.map(product => ({
+      ...product,
+      isInWishlist: wishlistSet.has(product.id),
+    }));
+  }, [currentProducts, wishlistItems]);
+
   return (
-    <div className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-50 min-h-screen">
-      <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
-        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8">
-          <div className="w-full lg:w-1/4">
-            <Filters
-              filters={filters}
-              setFilters={setFilters}
-              priceRange={priceRange}
-              handlePriceRangeChange={handlePriceRangeChange}
-              resetFilters={resetFilters}
-              location={cities}
-              setSearchQuery={setSearchQuery}
-            />
-          </div>
-
-          <div className="w-full lg:w-3/4">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
-              <div className="w-full sm:w-1/2">
-                <label className="text-sm font-medium block mb-2">
-                  Sort By
-                </label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full py-2 px-3 border rounded-md">
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SORT_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="w-full sm:w-1/2">
-                <label className="text-sm font-medium block mb-2">
-                  Items per page
-                </label>
-                <Select
-                  value={itemsPerPage.toString()}
-                  onValueChange={handleItemsPerPageChange}
-                >
-                  <SelectTrigger className="py-2 px-3 border rounded-md">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="12">12 items</SelectItem>
-                    <SelectItem value="24">24 items</SelectItem>
-                    <SelectItem value="48">48 items</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  gap-6">
-              {currentProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  link={`/marketplace/${product.id}`}
-                  onToggleWishlist={() => {
-                    // Logic to toggle wishlist
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="mt-8">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (currentPage > 1) handlePageChange(currentPage - 1);
-                      }}
+      <div className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-50 min-h-screen">
+        <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* Main content layout */}
+          <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8">
+            {/* Sticky Filters Section */}
+            <aside className="w-full lg:w-1/4 lg:block">
+              <div className="sticky top-20 overflow-hidden">
+                  <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 max-h-[calc(100vh-160px)]">
+                    <Filters
+                        filters={filters}
+                        setFilters={setFilters}
+                        priceRange={priceRange}
+                        handlePriceRangeChange={handlePriceRangeChange}
+                        resetFilters={resetFilters}
+                        location={cities}
+                        setSearchQuery={setSearchQuery}
                     />
-                  </PaginationItem>
+                  </div>
+              </div>
+            </aside>
 
-                  {[...Array(totalPages)].map((_, index) => {
-                    const page = index + 1;
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1)
-                    ) {
-                      return (
-                        <PaginationItem key={page}>
-                          <PaginationLink
-                            href="#"
-                            isActive={page === currentPage}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handlePageChange(page);
-                            }}
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      );
-                    } else if (
-                      page === currentPage - 2 ||
-                      page === currentPage + 2
-                    ) {
-                      return <PaginationEllipsis key={page} />;
-                    }
-                    return null;
-                  })}
+            {/* Products Grid Section */}
+            <main className="w-full lg:w-3/4">
+              {/* Sort and Items Per Page Controls */}
+              <div className="pb-4">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                  <div className="w-full sm:w-1/2">
+                    <label className="text-sm font-medium block mb-2">
+                      Sort By
+                    </label>
+                    <Select value={sortBy} onValueChange={setSortBy}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SORT_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-full sm:w-1/2">
+                    <label className="text-sm font-medium block mb-2">
+                      Items per page
+                    </label>
+                    <Select
+                        value={itemsPerPage.toString()}
+                        onValueChange={handleItemsPerPageChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="12">12 items</SelectItem>
+                        <SelectItem value="24">24 items</SelectItem>
+                        <SelectItem value="48">48 items</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
 
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (currentPage < totalPages)
-                          handlePageChange(currentPage + 1);
-                      }}
+              {/* Products Grid */}
+              <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {productsWithWishlistStatus.map((product) => (
+                    <ProductCard
+                        key={product.id}
+                        product={product}
+                        link={`/marketplace/${product.id}`}
+                        isInWishlist={product.isInWishlist}
                     />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="mt-8 p-4">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage > 1) handlePageChange(currentPage - 1);
+                          }}
+                      />
+                    </PaginationItem>
+
+                    {[...Array(totalPages)].map((_, index) => {
+                      const page = index + 1;
+                      if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                  href="#"
+                                  isActive={page === currentPage}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handlePageChange(page);
+                                  }}
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                        );
+                      } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                      ) {
+                        return <PaginationEllipsis key={page} />;
+                      }
+                      return null;
+                    })}
+
+                    <PaginationItem>
+                      <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage < totalPages)
+                              handlePageChange(currentPage + 1);
+                          }}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            </main>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

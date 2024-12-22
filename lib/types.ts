@@ -7,6 +7,7 @@ interface Product {
   category: string;
   stockCount: number;
   createdAt: Date;
+  quantity?: number;
   seller: {
     id: string;
     name: string;
@@ -108,3 +109,19 @@ interface SellersReview {
 type ProductsByCategory = {
   [key: string]: Product[]; // Adjust the type based on your Product definition
 };
+
+interface WishlistItem extends Product {
+  quantity: number;
+}
+
+interface WishlistAction {
+  product: Product;
+  action: 'add' | 'remove' | 'update';
+  quantity?: number;
+}
+
+interface ProductCardProps {
+  product: Product;
+  link: string;
+  isInWishlist: boolean;
+}

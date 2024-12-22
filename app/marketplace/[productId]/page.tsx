@@ -8,9 +8,15 @@ import ProductOverview from "@/components/product/ProductOverview";
 import ActionButtons from "@/components/product/ActionButtons";
 import CollapsibleSection from "@/components/product/CollapsibleSection";
 import CommentSection from "@/components/product/Comment";
+import {useWishlist} from "@/lib/hooks/useWishlist";
 
 function ProductPage({ params }: { params: { productId: string } }) {
   const product = dummyProducts.find((p) => p.id === params.productId);
+  const { data: wishlistItems = [] } = useWishlist();
+
+  const isInWishlist = React.useMemo(() => {
+    return wishlistItems.some(item => item.id === product?.id);
+  }, [wishlistItems, product?.id]);
 
   const [openSections, setOpenSections] = useState({
     sellerInfo: true,
@@ -58,6 +64,8 @@ function ProductPage({ params }: { params: { productId: string } }) {
           />
           <ActionButtons
             sellerContact={product.seller.contact}
+            product={product}
+            isInWishlist={isInWishlist}
           />
         </div>
 

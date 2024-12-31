@@ -26,7 +26,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, X, Upload } from "lucide-react";
 import { CATEGORIES, CATEGORYSPEC } from "@/lib/constants";
 
-const defaultProduct: Product = {
+const defaultProduct: any = {
   id: "",
   name: "",
   price: 0,

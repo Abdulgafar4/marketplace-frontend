@@ -25,7 +25,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, X, Upload } from "lucide-react";
 import { CATEGORIES, CATEGORYSPEC } from "@/lib/constants";
-import Image from "next/image";
 
 const defaultProduct: Product = {
   id: "",
@@ -47,24 +46,7 @@ const defaultProduct: Product = {
     contact: "",
     totalSales: undefined,
   },
-  specifications: {
-    dimensions: undefined,
-    weight: undefined,
-    material: undefined,
-    features: undefined,
-    size: undefined,
-  },
   paymentOptions: [],
-  origin: {
-    brand: "",
-    country: "",
-  },
-  usageGuidelines: {
-    careInstructions: "",
-    installation: "",
-  },
-  faq: [],
-  relatedProducts: [],
 };
 
 export default function AddProduct({
@@ -150,7 +132,7 @@ export default function AddProduct({
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
                       {product.images.map((image, index) => (
                         <div key={index} className="relative group">
-                          <Image
+                          <img
                             src={image}
                             alt={`Product ${index + 1}`}
                             className="w-full h-24 object-cover rounded-md"

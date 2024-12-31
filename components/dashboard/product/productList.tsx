@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import EditProduct from "./editProduct";
+import {Badge} from "@/components/ui/badge";
 
 export default function ProductList({
   products,
@@ -38,9 +39,11 @@ export default function ProductList({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead className="hidden md:table-cell">Category</TableHead>
+          <TableHead>ID</TableHead>
+          <TableHead>Image</TableHead>
+          <TableHead className="hidden sm:table-cell" >Name</TableHead>
+          <TableHead className="hidden sm:table-cell">Price</TableHead>
+          <TableHead className="hidden lg:table-cell">Category</TableHead>
           <TableHead className="hidden md:table-cell">Stock</TableHead>
           <TableHead className="hidden lg:table-cell">Condition</TableHead>
           <TableHead>Actions</TableHead>
@@ -49,16 +52,26 @@ export default function ProductList({
       <TableBody>
         {products.map((product) => (
           <TableRow key={product.id}>
-            <TableCell>{product.name}</TableCell>
-            <TableCell>${product.price.toFixed(2)}</TableCell>
-            <TableCell className="hidden md:table-cell">
-              {product.category}
+            <TableCell>{product.id}</TableCell>
+            <TableCell>
+              <div>
+                <img src={product.imageUrl} alt={product.id} width={50} height={50} />
+              </div>
+            </TableCell>
+            <TableCell className="hidden sm:table-cell">{product.name}</TableCell>
+            <TableCell className="hidden sm:table-cell">${product.price.toFixed(2)}</TableCell>
+            <TableCell className="hidden lg:table-cell">
+              <Badge className="bg-gray-500 dark:text-gray-100">
+              {product.category.toUpperCase()}
+              </Badge>
             </TableCell>
             <TableCell className="hidden md:table-cell">
               {product.stockCount}
             </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {product.condition}
+            <TableCell className="hidden lg:table-cell">
+              <Badge className="bg-gray-500 dark:text-gray-100">
+                {product.condition.toUpperCase()}
+              </Badge>
             </TableCell>
 
             <TableCell>

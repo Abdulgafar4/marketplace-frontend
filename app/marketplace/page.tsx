@@ -133,9 +133,7 @@ const Marketplace: React.FC = () => {
   return (
       <div className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-50 min-h-screen">
         <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {/* Main content layout */}
-          <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8">
-            {/* Sticky Filters Section */}
+          <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-2 mt-8">
             <aside className="w-full lg:w-1/4 lg:block">
               <div className="sticky top-20 overflow-hidden">
                   <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 max-h-[calc(100vh-160px)]">
@@ -152,9 +150,7 @@ const Marketplace: React.FC = () => {
               </div>
             </aside>
 
-            {/* Products Grid Section */}
             <main className="w-full lg:w-3/4">
-              {/* Sort and Items Per Page Controls */}
               <div className="pb-4">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="w-full sm:w-1/2">
@@ -195,7 +191,6 @@ const Marketplace: React.FC = () => {
                 </div>
               </div>
 
-              {/* Products Grid */}
               <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {productsWithWishlistStatus.map((product) => (
                     <ProductCard

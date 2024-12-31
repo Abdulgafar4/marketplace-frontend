@@ -16,7 +16,7 @@ interface QuickViewModalProps {
 const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen, onClose, link }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[600px] sm:p-8">
+            <DialogContent className="sm:max-w-[600px] sm:p-8 dark:bg-gray-900">
                 <div className="grid md:grid-cols-2 gap-0 max-h-[90vh] overflow-auto">
                     {/* Image Section */}
                     <div className="relative h-[250px] md:h-full">

@@ -56,13 +56,13 @@ const Filters: React.FC<{
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader>
           <CollapsibleTrigger asChild>
-            <div className="flex justify-between items-center cursor-pointer dark:hover:bg-black transition-colors">
+            <div className="flex justify-between items-center cursor-pointer transition-colors">
               <h3 className="font-semibold">Filters</h3>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="dark:bg-gray-800">
                 {isOpen ? (
-                  <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-100" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-100" />
                 )}
               </Button>
             </div>
@@ -172,7 +172,7 @@ const Filters: React.FC<{
 
                 <Button
                     variant="outline"
-                    className="w-full"
+                    className="w-full dark:bg-gray-900"
                     onClick={resetFilters}
                 >
                   Reset Filters

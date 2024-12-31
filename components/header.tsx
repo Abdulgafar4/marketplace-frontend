@@ -27,7 +27,7 @@ export default function Header() {
 
 
   return (
-    <header className="inset-x-0 top-0 z-50 fixed bg-white dark:bg-gray-800">
+    <header className="inset-x-0 top-0 z-50 fixed bg-white dark:bg-gray-900">
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"

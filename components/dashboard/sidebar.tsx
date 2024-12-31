@@ -1,4 +1,3 @@
-// DashboardSidebar.tsx
 import { Button } from "@/components/ui/button";
 
 import {
@@ -7,10 +6,10 @@ import {
   Settings,
   Repeat, History, Sun, Moon,
 } from "lucide-react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {useTheme} from "next-themes";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 
 const sidebarItems = [
@@ -26,9 +25,9 @@ export function Sidebar() {
   const pathname = usePathname()
   const { setTheme, theme } = useTheme()
   return (
-      <aside className="w-16 md:w-64 flex-col fixed inset-y-0 mt-20">
-        <div className="flex flex-col h-full px-3 py-4 overflow-y-auto border-r">
-          <nav className="flex-1 space-y-2">
+      <aside className="w-16 md:w-64 flex-col inset-y-0 dark:bg-gray-900">
+        <div className="flex flex-col h-screen px-3 py-4 overflow-y-auto border-r">
+          <nav className="flex-1 space-y-2 mt-20">
             {sidebarItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -39,8 +38,8 @@ export function Sidebar() {
                             href={item.href}
                             className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                                 isActive
-                                    ? 'bg-secondary text-secondary-foreground'
-                                    : 'text-muted-foreground hover:bg-secondary hover:text-secondary-foreground'
+                                    ? 'bg-secondary text-secondary-foreground dark:bg-gray-700'
+                                    : 'text-muted-foreground hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-gray-700'
                             }`}
                         >
                           <item.icon className="w-5 h-5 md:mr-3"/>

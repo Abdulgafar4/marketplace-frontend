@@ -38,7 +38,7 @@ export default function ProductList({
   return (
     <Table>
       <TableHeader>
-        <TableRow>
+        <TableRow className=" dark:hover:bg-gray-800">
           <TableHead>ID</TableHead>
           <TableHead>Image</TableHead>
           <TableHead className="hidden sm:table-cell" >Name</TableHead>
@@ -51,7 +51,7 @@ export default function ProductList({
       </TableHeader>
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.id}>
+          <TableRow key={product.id} className=" dark:hover:bg-gray-800">
             <TableCell>{product.id}</TableCell>
             <TableCell>
               <div>

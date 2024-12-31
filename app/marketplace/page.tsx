@@ -131,10 +131,10 @@ const Marketplace: React.FC = () => {
   }, [currentProducts, wishlistItems]);
 
   return (
-      <div className="bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-50 min-h-screen">
-        <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-2 mt-8">
-            <aside className="w-full lg:w-1/4 lg:block">
+      <div className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-50 min-h-screen">
+        <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col lg:flex-row gap-2 xl:gap-10 mt-2 md:mt-6">
+            <aside className="w-full lg:w-1/4 xl:w-1/5 lg:block">
               <div className="sticky top-20 overflow-hidden">
                   <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 max-h-[calc(100vh-160px)]">
                     <Filters
@@ -158,12 +158,12 @@ const Marketplace: React.FC = () => {
                       Sort By
                     </label>
                     <Select value={sortBy} onValueChange={setSortBy}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full dark:border-black">
                         <SelectValue placeholder="Select an option" />
                       </SelectTrigger>
                       <SelectContent>
                         {SORT_OPTIONS.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
+                            <SelectItem key={option.value} value={option.value} className=" dark:bg-gray-900">
                               {option.label}
                             </SelectItem>
                         ))}
@@ -178,10 +178,10 @@ const Marketplace: React.FC = () => {
                         value={itemsPerPage.toString()}
                         onValueChange={handleItemsPerPageChange}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full dark:border-black">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className=" dark:bg-gray-900">
                         <SelectItem value="12">12 items</SelectItem>
                         <SelectItem value="24">24 items</SelectItem>
                         <SelectItem value="48">48 items</SelectItem>

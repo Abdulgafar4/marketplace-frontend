@@ -15,8 +15,8 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/compon
 const sidebarItems = [
   { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Products', href: '/dashboard/products', icon: Package },
-  { name: 'Renew Product', href: '/dashboard/renew', icon: Repeat },
-  { name: 'Older Product', href: '/dashboard/older', icon: History },
+  { name: 'Pending Products', href: '/dashboard/renew', icon: Repeat },
+  { name: 'Sold Products', href: '/dashboard/older', icon: History },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 

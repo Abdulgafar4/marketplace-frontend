@@ -1,22 +1,92 @@
 // Constants
+export enum CategoryType {
+  ALL = "all",
+  ELECTRONICS_APPLIANCES = "electronics_appliances",
+  FURNITURE = "furniture",
+  WOMENS_FASHION = "womens_fashion",
+  MENS_FASHION = "mens_fashion",
+  GARAGE_SALES = "garage_sales",
+  VEHICLES_PARTS = "vehicles_parts",
+  HOME_GARDEN = "home_garden",
+  BABY_KIDS = "baby_kids",
+  HEALTH_BEAUTY = "health_beauty",
+  SPORTS_OUTDOORS = "sports_outdoors",
+  GAMES_HOBBIES = "games_hobbies",
+  BOOKS_MUSIC = "books_music",
+  PET_SUPPLIES = "pet_supplies",
+  ART_COLLECTIBLES = "art_collectibles",
+  WANTED = "wanted",
+  OTHER = "other",
+}
+export enum Condition {
+  like_new = "Like New",
+  new = "New",
+  good = "Good",
+  fair = "Fair",
+  poor = "Poor",
+}
+
+export enum Status {
+  active = "Active",
+  sold = "Sold",
+  pending = "Pending",
+}
+
+export enum PaymentType {
+  cash = "Cash",
+  etransfer = "eTransfer",
+  any = "Any",
+}
+
+export interface CategoryOption {
+  value: CategoryType;
+  label: string;
+}
+
+export const CATEGORY_OPTIONS: CategoryOption[] = [
+  { value: CategoryType.ALL, label: "All Categories" },
+  {
+    value: CategoryType.ELECTRONICS_APPLIANCES,
+    label: "Electronics & Appliances",
+  },
+  { value: CategoryType.FURNITURE, label: "Furniture" },
+  { value: CategoryType.HOME_GARDEN, label: "Home & Garden" },
+  { value: CategoryType.BABY_KIDS, label: "Baby & Kids" },
+  { value: CategoryType.WOMENS_FASHION, label: "Women's Fashion" },
+  { value: CategoryType.MENS_FASHION, label: "Men's Fashion" },
+  { value: CategoryType.HEALTH_BEAUTY, label: "Health & Beauty" },
+  { value: CategoryType.SPORTS_OUTDOORS, label: "Sports & Outdoors" },
+  { value: CategoryType.GAMES_HOBBIES, label: "Games & Hobbies" },
+  { value: CategoryType.BOOKS_MUSIC, label: "Books & Music" },
+  { value: CategoryType.PET_SUPPLIES, label: "Pet Supplies" },
+  { value: CategoryType.ART_COLLECTIBLES, label: "Art & Collectibles" },
+  { value: CategoryType.VEHICLES_PARTS, label: "Vehicles & Parts" },
+  { value: CategoryType.OTHER, label: "Other" },
+  { value: CategoryType.GARAGE_SALES, label: "Garage Sales" },
+  { value: CategoryType.WANTED, label: "Wanted" },
+];
+
 export const CATEGORIES = [
-  { value: "all", label: "All Categories" },
-  { value: "electronics_appliances", label: "Electronics & Appliances" },
-  { value: "furniture", label: "Furniture" },
-  { value: "home_garden", label: "Home & Garden" },
-  { value: "baby_kids", label: "Baby & Kids" },
-  { value: "womens_fashion", label: "Women's Fashion" },
-  { value: "mens_fashion", label: "Men's Fashion" },
-  { value: "health_beauty", label: "Health & Beauty" },
-  { value: "sports_outdoors", label: "Sports & Outdoors" },
-  { value: "games_hobbies", label: "Games & Hobbies" },
-  { value: "books_music", label: "Books & Music" },
-  { value: "pet_supplies", label: "Pet Supplies" },
-  { value: "art_collectibles", label: "Art & Collectibles" },
-  { value: "vehicles_parts", label: "Vehicles & Parts" },
-  { value: "other", label: "Other" },
-  { value: "garage_sales", label: "Garage Sales" },
-  { value: "wanted", label: "Wanted" },
+  { value: CategoryType.ALL, label: "All Categories" },
+  {
+    value: CategoryType.ELECTRONICS_APPLIANCES,
+    label: "Electronics & Appliances",
+  },
+  { value: CategoryType.FURNITURE, label: "Furniture" },
+  { value: CategoryType.HOME_GARDEN, label: "Home & Garden" },
+  { value: CategoryType.BABY_KIDS, label: "Baby & Kids" },
+  { value: CategoryType.WOMENS_FASHION, label: "Women's Fashion" },
+  { value: CategoryType.MENS_FASHION, label: "Men's Fashion" },
+  { value: CategoryType.HEALTH_BEAUTY, label: "Health & Beauty" },
+  { value: CategoryType.SPORTS_OUTDOORS, label: "Sports & Outdoors" },
+  { value: CategoryType.GAMES_HOBBIES, label: "Games & Hobbies" },
+  { value: CategoryType.BOOKS_MUSIC, label: "Books" },
+  { value: CategoryType.PET_SUPPLIES, label: "Pet Supplies" },
+  { value: CategoryType.ART_COLLECTIBLES, label: "Art & Collectibles" },
+  { value: CategoryType.VEHICLES_PARTS, label: "Vehicles & Parts" },
+  { value: CategoryType.OTHER, label: "Other" },
+  { value: CategoryType.GARAGE_SALES, label: "Garage Sales" },
+  { value: CategoryType.WANTED, label: "Wanted" },
 ];
 
 export const CATEGORYSPEC = {
@@ -170,10 +240,28 @@ export const CATEGORYSPEC = {
     { name: "budget", label: "Budget Range", type: "text" },
   ],
 };
-
 export const SORT_OPTIONS = [
   { value: "newest", label: "Newest Arrivals" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
   { value: "rating", label: "Highest Rated" },
 ];
+
+// export type CategorySpecificData = {
+//   [CategoryType.ELECTRONICS_APPLIANCES]: ElectronicsListing;
+//   [CategoryType.FURNITURE]: FurnitureListing;
+//   [CategoryType.WOMENS_FASHION]: FashionListing;
+//   [CategoryType.MENS_FASHION]: FashionListing;
+//   [CategoryType.VEHICLES_PARTS]: VehicleListing;
+//   [CategoryType.GARAGE_SALES]: GarageSaleListing;
+//   [CategoryType.ALL]: BaseListingData;
+//   [CategoryType.HOME_GARDEN]: BaseListingData;
+//   [CategoryType.BABY_KIDS]: BaseListingData;
+//   [CategoryType.HEALTH_BEAUTY]: BaseListingData;
+//   [CategoryType.SPORTS_OUTDOORS]: BaseListingData;
+//   [CategoryType.GAMES_HOBBIES]: BaseListingData;
+//   [CategoryType.BOOKS_MUSIC]: BaseListingData;
+//   [CategoryType.PET_SUPPLIES]: BaseListingData;
+//   [CategoryType.ART_COLLECTIBLES]: BaseListingData;
+//   [CategoryType.OTHER]: BaseListingData;
+// };

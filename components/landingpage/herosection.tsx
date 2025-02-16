@@ -36,10 +36,10 @@ export function HeroSection() {
               Start Selling
             </a>
             <a
-              href="#"
+              href="/marketplace"
               className="text-sm font-semibold text-gray-900 dark:text-gray-300"
             >
-              Learn more <span aria-hidden="true">→</span>
+              Check Market <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>

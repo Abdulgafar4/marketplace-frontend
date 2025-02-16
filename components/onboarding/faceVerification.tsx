@@ -98,8 +98,9 @@ const FaceVerification: React.FC<FaceVerificationProps> = ({
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Face Verification</h2>
+            <h2 className="text-2xl font-bold">Profile Picture</h2>
             <p className="text-sm text-muted-foreground">
+                Update a proper Profile Pic it can't be changed for now.
                 Complete a quick face verification to earn your Trust Badge and build
                 credibility with other users.
             </p>

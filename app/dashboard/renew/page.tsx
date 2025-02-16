@@ -3,69 +3,98 @@
 import { useEffect, useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-
-interface Product {
-    id: string
-    name: string
-    image: string
-    clicks: number
-    status: 'active' | 'renew' | 'deleted'
-    createdAt: number
-}
+import {useDeleteProduct, useProducts} from "@/lib/hooks/useProduct";
+import EditProduct from "@/components/dashboard/product/editProduct";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import {Trash2} from "lucide-react";
+import Loader from "@/components/loading";
+import {toast} from "react-toastify";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 
 export default function RenewProductsPage() {
-    const [products, setProducts] = useState<Product[]>([])
+const { data: products, isLoading, isError } = useProducts();
+    const { mutateAsync } = useDeleteProduct()
 
-    useEffect(() => {
-        const storedProducts = localStorage.getItem('products')
-        if (storedProducts) {
-            setProducts(JSON.parse(storedProducts))
+    const onDeleteProduct = async (id: string) => {
+        try {
+            await mutateAsync(id);
+            toast.error("Deleted product with the id '" + id);
+        } catch (error: any) {
+            toast.error(error.message);
         }
-    }, [])
-
-    const updateProductStatus = (id: string, status: 'active' | 'renew' | 'deleted') => {
-        const updatedProducts = products.map(p =>
-            p.id === id ? { ...p, status } : p
-        )
-        setProducts(updatedProducts)
-        localStorage.setItem('products', JSON.stringify(updatedProducts))
     }
 
     return (
-        <div className="space-y-4">
-            <h1 className="text-2xl font-bold">Renew Products</h1>
-
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Days Listed</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {products.filter(p => p.status === 'renew').map((product) => {
-                        const daysListed = Math.floor((Date.now() - product.createdAt) / (1000 * 60 * 60 * 24))
-                        return (
-                            <TableRow key={product.id}>
-                                <TableCell>
-                                    <img src={product.image} alt={product.name} className="w-10 h-10 object-cover" />
-                                </TableCell>
-                                <TableCell>{product.name}</TableCell>
-                                <TableCell>{daysListed}</TableCell>
-                                <TableCell>
-                                    <Button variant="outline" size="sm" className="mr-2"
-                                            onClick={() => updateProductStatus(product.id, 'active')}>
-                                        Renew Listing
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
-                </TableBody>
-            </Table>
-        </div>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-2xl font-bold">Pending Products</CardTitle>
+            </CardHeader>
+            <CardContent>
+                {isLoading ? <Loader message="Fetching products..." /> : isError ? <Loader message="Try reload the page..." /> : (
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Image</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Day Listed</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {products && products.filter(p => p.status === 'Pending').map((product: any) => {
+                            return (
+                                <TableRow key={product.id}>
+                                    <TableCell>
+                                        <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover" />
+                                    </TableCell>
+                                    <TableCell>{product.title}</TableCell>
+                                    <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
+                                    <TableCell>
+                                        <div className="flex space-x-2">
+                                            <EditProduct
+                                                product={product}
+                                            />
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="ghost" size="icon">
+                                                        <Trash2 className="h-4 w-4" />
+                                                        <span className="sr-only">Delete</span>
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This action cannot be undone. This will permanently
+                                                            delete your product.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => onDeleteProduct(product.$id!)}
+                                                        >
+                                                            Delete
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+                    )}
+            </CardContent>
+        </Card>
     )
 }
 

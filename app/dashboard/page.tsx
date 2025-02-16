@@ -1,22 +1,23 @@
 'use client'
 
-import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import dummyProducts from "@/app/api/dummyData";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Badge} from "@/components/ui/badge";
-
+import {useProducts} from "@/lib/hooks/useProduct";
+import Loader from "@/components/loading";
+import {capitalize, countProductsByStatus} from "@/lib/utils";
+import {Status} from "@/lib/constants";
 
 export default function OverviewPage() {
-    const [products] = useState<Product[]>(dummyProducts);
+    const { data, isLoading } = useProducts();
 
 
-    const activeListing = products.length
-    const renewListing = products.length
-    const deletedListing = products.length
+    const activeListing = countProductsByStatus(data, Status.active)
+    const pendingListing = countProductsByStatus(data, Status.pending)
+    const soldListing = countProductsByStatus(data, Status.sold)
 
-    const topProducts = [...products]
-        .slice(0, 5)
+
+    const topProducts = data?.slice(0, 5)
 
     return (
         <div className="space-y-4">
@@ -33,18 +34,18 @@ export default function OverviewPage() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Renew Listings</CardTitle>
+                        <CardTitle className="text-sm font-medium">Pending Listing</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{renewListing}</div>
+                        <div className="text-2xl font-bold">{pendingListing}</div>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Deleted/Relist</CardTitle>
+                        <CardTitle className="text-sm font-medium">Sold</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{deletedListing}</div>
+                        <div className="text-2xl font-bold">{soldListing}</div>
                     </CardContent>
                 </Card>
             </div>
@@ -54,46 +55,48 @@ export default function OverviewPage() {
                     <CardTitle>Top Recent Products</CardTitle>
                 </CardHeader>
                 <CardContent>
+                    {isLoading ? <Loader message="Fetching products..." /> : (
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>ID</TableHead>
                                 <TableHead>Image</TableHead>
                                 <TableHead className="hidden sm:table-cell" >Name</TableHead>
                                 <TableHead>Price</TableHead>
                                 <TableHead className="hidden md:table-cell">Category</TableHead>
-                                <TableHead className="hidden md:table-cell">Stock</TableHead>
+                                <TableHead className="hidden md:table-cell">Status</TableHead>
                                 <TableHead className="hidden lg:table-cell">Condition</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {topProducts.map((product) => (
+                            {topProducts && topProducts.map((product) => (
                                 <TableRow key={product.id}>
-                                    <TableCell>{product.id}</TableCell>
                                     <TableCell>
                                         <div>
-                                            <img src={product.imageUrl} alt={product.id} width={50} height={50} />
+                                            <img src={product.images[0]} alt={product.id} width={50} height={50} />
                                         </div>
                                     </TableCell>
-                                    <TableCell className="hidden sm:table-cell">{product.name}</TableCell>
+                                    <TableCell className="hidden sm:table-cell">{capitalize(product.title)}</TableCell>
                                     <TableCell>${product.price.toFixed(2)}</TableCell>
                                     <TableCell className="hidden md:table-cell">
                                         <Badge className="bg-gray-500 dark:text-gray-100">
-                                            {product.category.toUpperCase()}
+                                            {capitalize(product.category.replace("_", " "))}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
-                                        {product.stockCount}
+                                        <Badge className="bg-gray-500 dark:text-gray-100">
+                                        {product.status ?? "Active"}
+                                        </Badge>
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
                                         <Badge className="bg-gray-500 dark:text-gray-100">
-                                        {product.condition.toUpperCase()}
+                                        {capitalize(product.condition)}
                                         </Badge>
                                     </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
+                    )}
                 </CardContent>
             </Card>
         </div>

@@ -9,9 +9,20 @@ import ActionButtons from "@/components/product/ActionButtons";
 import CollapsibleSection from "@/components/product/CollapsibleSection";
 import CommentSection from "@/components/product/Comment";
 import {useWishlist} from "@/lib/hooks/useWishlist";
+import Loader from "@/components/loading";
+import {useProducts} from "@/lib/hooks/useProduct";
+import {useSeller} from "@/lib/hooks/useSeller";
+import {countProductsByStatus} from "@/lib/utils";
+import {Status, PaymentType} from "@/lib/constants";
+
+
 
 function ProductPage({ params }: { params: { productId: string } }) {
-  const product = dummyProducts.find((p) => p.id === params.productId);
+  const {data} = useProducts();
+  const {data: profile} = useSeller()
+
+  console.log({profile})
+  const product = data && data.find((p) => p.$id === params.productId);
   const { data: wishlistItems = [] } = useWishlist();
 
   const isInWishlist = React.useMemo(() => {
@@ -40,30 +51,35 @@ function ProductPage({ params }: { params: { productId: string } }) {
       relatedProduct.id !== params.productId
   );
 
-  if (!product) {
-    return <div className="text-center py-8">Product not found</div>;
-  }
+  const totalSales = countProductsByStatus(data, Status.sold)
 
-  const productRating = product.reviews?.length
-    ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-      product.reviews.length
-    : 0;
+
+  if (!product) {
+    return <Loader message="No product found." />;
+  }
+  //
+  // const productRating = product.reviews?.length
+  //   ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+  //     product.reviews.length
+  //   : 0;
+
+  const  productRating = 0;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black text-black dark:text-gray-200 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 px-4">
         {/* Left Column: Product Image and Overview */}
         <div className="space-y-6">
-          <ProductImage imageUrl={product.imageUrl} name={product.name} />
+          <ProductImage imageUrl={product.images[0]} name={product.title} />
           <ProductOverview
-            name={product.name}
+            name={product.title}
             rating={productRating}
             price={product.price}
             description={product.description}
             reviewCount={product.reviews?.length || 0}
           />
           <ActionButtons
-            sellerContact={product.seller.contact}
+            sellerContact={profile?.contact}
             product={product}
             isInWishlist={isInWishlist}
           />
@@ -73,8 +89,8 @@ function ProductPage({ params }: { params: { productId: string } }) {
         <div className="space-y-6">
           <CollapsibleSection
             title="Seller Information"
-            badge={`${product.seller.totalSales} sales`}
-            rating={product.seller.rating}
+            badge={`${totalSales} sales`}
+            rating={5}
             isOpen={openSections.sellerInfo}
             onToggle={() => toggleSection("sellerInfo")}
           >
@@ -82,7 +98,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium text-gray-500">Name</span>
                 <span className="text-sm text-gray-900">
-                  {product.seller.name}
+                  {`${profile?.firstName} ${profile?.lastName}`}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -90,7 +106,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Location
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.seller.location}
+                  {profile?.location.split(',')[0]}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -98,7 +114,7 @@ function ProductPage({ params }: { params: { productId: string } }) {
                   Contact
                 </span>
                 <span className="text-sm text-gray-900">
-                  {product.seller.contact}
+                  {profile?.contact}
                 </span>
               </div>
             </div>
@@ -174,35 +190,37 @@ function ProductPage({ params }: { params: { productId: string } }) {
           </CollapsibleSection>
 
           <CollapsibleSection
-            title="Payment Options"
-            isOpen={openSections.paymentOptions}
-            onToggle={() => toggleSection("paymentOptions")}
+              title="Payment Options"
+              isOpen={openSections.paymentOptions}
+              onToggle={() => toggleSection("paymentOptions")}
           >
             <div className="space-y-2">
-              {product.paymentOptions.map((option: any, index: any) => (
-                <div key={index} className="text-sm text-gray-900">
-                  {option}
-                </div>
-              ))}
+              {product.paymentOption === PaymentType.any &&
+                  Object.values(PaymentType).map((option, index) => (
+                      <div key={index} className="text-sm text-gray-900">
+                        {option}
+                      </div>
+                  ))
+              }
             </div>
           </CollapsibleSection>
 
-          <CollapsibleSection
-            title="FAQs"
-            isOpen={openSections.faqs}
-            onToggle={() => toggleSection("faqs")}
-          >
-            <div className="space-y-4">
-              {product.faq.map((faq: any, index: any) => (
-                <div key={index} className="space-y-1">
-                  <p className="text-sm font-semibold text-gray-900">
-                    {faq.question}
-                  </p>
-                  <p className="text-sm text-gray-600">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </CollapsibleSection>
+          {/*<CollapsibleSection*/}
+          {/*    title="FAQs"*/}
+          {/*    isOpen={openSections.faqs}*/}
+          {/*    onToggle={() => toggleSection("faqs")}*/}
+          {/*>*/}
+          {/*  <div className="space-y-4">*/}
+          {/*    {product.faq.map((faq: any, index: any) => (*/}
+          {/*      <div key={index} className="space-y-1">*/}
+          {/*        <p className="text-sm font-semibold text-gray-900">*/}
+          {/*          {faq.question}*/}
+          {/*        </p>*/}
+          {/*        <p className="text-sm text-gray-600">{faq.answer}</p>*/}
+          {/*      </div>*/}
+          {/*    ))}*/}
+          {/*  </div>*/}
+          {/*</CollapsibleSection>*/}
 
           <CollapsibleSection
             title="Related Products"

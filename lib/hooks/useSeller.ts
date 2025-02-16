@@ -1,5 +1,6 @@
 // hooks/useSeller.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {useUser} from "@clerk/nextjs";
 import {sellerApi} from "@/app/api/sellers";
 
 // Hooks
@@ -21,13 +22,27 @@ export function useSellers() {
     });
 }
 
-export function useSeller(id: string) {
+export function useSeller() {
+
+    const { user } = useUser();
+
     return useQuery({
-        queryKey: ['sellers', id],
-        queryFn: () => sellerApi.getOne(id),
-        enabled: !!id,
+        queryKey: ["user", user?.id],
+        queryFn: async () => {
+            const users = await sellerApi.getAll();
+            const matchingUser = users.find((u) => u.userId === user?.id);
+
+            if (matchingUser) {
+                const userDocument = await sellerApi.getOne(matchingUser.$id);
+                return userDocument;
+            } else {
+                throw new Error("User not found");
+            }
+        },
+        enabled: !!user?.id,
     });
 }
+
 
 export function useUpdateSeller() {
     const queryClient = useQueryClient();

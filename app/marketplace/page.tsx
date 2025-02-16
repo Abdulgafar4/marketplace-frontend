@@ -22,9 +22,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {useWishlist} from "@/lib/hooks/useWishlist";
+import {useProducts} from "@/lib/hooks/useProduct";
+import { useSellers} from "@/lib/hooks/useSeller";
+import Loader from "@/components/loading";
 
 const Marketplace: React.FC = () => {
-  const [products] = useState<Product[]>(dummyProducts);
+  const {data: products, isLoading} = useProducts();
+  const { data: profile} = useSellers();
+
   const [sortBy, setSortBy] = useState("newest");
   const [filters, setFilters] = useState({
     category: "all",
@@ -38,20 +43,27 @@ const Marketplace: React.FC = () => {
   const { data: wishlistItems = [] } = useWishlist();
 
   const priceRange = useMemo(() => {
+    if (!products || products.length === 0) {
+      return { min: 0, max: 0 }; // or whatever default values you want
+    }
     const prices = products.map((p) => p.price);
     return { min: Math.min(...prices), max: Math.max(...prices) };
   }, [products]);
 
   // Get unique cities from products
   const cities = useMemo(() => {
+    if (!profile || !Array.isArray(profile)) {
+      return ["all"]; // Default value when no profile data exists
+    }
+
     const uniqueCities = Array.from(
-      new Set(products.map((p) => p.seller.location))
+        new Set(profile.map((p) => p.location).filter(Boolean))
     );
     return ["all", ...uniqueCities.sort()];
-  }, [products]);
+  }, [profile]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    return products
+    return products && products
       .filter((product) => {
         const matchesCategory =
           filters.category === "all" || product.category === filters.category;
@@ -61,9 +73,9 @@ const Marketplace: React.FC = () => {
         const matchesCity =
           filters.location === "all" ||
           product.seller.location === filters.location;
-        const matchesRating = product.rating && (product?.rating >= filters.minRating);
+        // const matchesRating = product.rating && (product?.rating >= filters.minRating);
         const matchesSearch = searchQuery
-          ? product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          ? product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             product.description
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
@@ -72,7 +84,7 @@ const Marketplace: React.FC = () => {
         return (
           matchesCategory &&
           matchesPrice &&
-          matchesRating &&
+          // matchesRating &&
           matchesSearch &&
           matchesCity
         );
@@ -83,20 +95,20 @@ const Marketplace: React.FC = () => {
             return a.price - b.price;
           case "price-desc":
             return b.price - a.price;
-          case "rating":
-            return b.rating && a.rating ? b?.rating - a?.rating : 0;
+          // case "rating":
+          //   return b.rating && a.rating ? b?.rating - a?.rating : 0;
           case "newest":
-            return b.createdAt.getTime() - a.createdAt.getTime();
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
           default:
             return 0;
         }
       });
   }, [products, sortBy, filters, searchQuery]);
 
-  const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
+  const totalPages = filteredAndSortedProducts && Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredAndSortedProducts && filteredAndSortedProducts.slice(startIndex, endIndex);
 
   const handlePriceRangeChange = (value: number[]) => {
     if (value.length === 2) {
@@ -124,7 +136,7 @@ const Marketplace: React.FC = () => {
 
   const productsWithWishlistStatus = React.useMemo(() => {
     const wishlistSet = new Set(wishlistItems.map(item => item.id)); // Faster lookup with Set
-    return currentProducts.map(product => ({
+    return currentProducts && currentProducts.map(product => ({
       ...product,
       isInWishlist: wishlistSet.has(product.id),
     }));
@@ -159,7 +171,7 @@ const Marketplace: React.FC = () => {
                     </label>
                     <Select value={sortBy} onValueChange={setSortBy}>
                       <SelectTrigger className="w-full dark:border-black">
-                        <SelectValue placeholder="Select an option" />
+                        <SelectValue placeholder="Select an option"/>
                       </SelectTrigger>
                       <SelectContent>
                         {SORT_OPTIONS.map((option) => (
@@ -179,7 +191,7 @@ const Marketplace: React.FC = () => {
                         onValueChange={handleItemsPerPageChange}
                     >
                       <SelectTrigger className="w-full dark:border-black">
-                        <SelectValue placeholder="Select" />
+                        <SelectValue placeholder="Select"/>
                       </SelectTrigger>
                       <SelectContent className=" dark:bg-gray-900">
                         <SelectItem value="12">12 items</SelectItem>
@@ -191,15 +203,24 @@ const Marketplace: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {productsWithWishlistStatus.map((product) => (
-                    <ProductCard
-                        key={product.id}
-                        product={product}
-                        link={`/marketplace/${product.id}`}
-                        isInWishlist={product.isInWishlist}
-                    />
-                ))}
+              <div
+                  className="grid grid-cols-1 min-[350px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {isLoading ? (
+                    <div className="col-span-full flex justify-center items-center min-h-[200px]">
+                      <Loader message="Loading Products..."/>
+                    </div>
+                ) : (
+                    productsWithWishlistStatus && productsWithWishlistStatus.map((product) => {
+                      return (
+                          <ProductCard
+                              key={product.$id}
+                              product={product}
+                              link={`/marketplace/${product.$id}`}
+                              isInWishlist={product.isInWishlist}
+                          />
+                      );
+                    })
+                )}
               </div>
 
               {/* Pagination */}
@@ -241,7 +262,7 @@ const Marketplace: React.FC = () => {
                           page === currentPage - 2 ||
                           page === currentPage + 2
                       ) {
-                        return <PaginationEllipsis key={page} />;
+                        return <PaginationEllipsis key={page}/>;
                       }
                       return null;
                     })}
@@ -251,7 +272,7 @@ const Marketplace: React.FC = () => {
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
-                            if (currentPage < totalPages)
+                            if (totalPages && (currentPage < totalPages))
                               handlePageChange(currentPage + 1);
                           }}
                       />
